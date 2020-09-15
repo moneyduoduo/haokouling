@@ -1,0 +1,1579 @@
+<template>
+	<view class="tabs">
+		<view class="topBar" :style="styleObject">
+			<!-- <view class="bg_image_box">
+				<image :src="bgUrl"  class="bg_image" mode="widthFix" ></image>
+			</view> -->
+			<view class="positionTop">
+				<view class="status_bar" :style="{height: statusBarHeight+'px'}">
+				</view>
+				<view class="search">
+					<view class="searchDiv" @click="search">
+						<image class="search-images" src="../../static/image/index/sousuo.png"></image>
+						<text class="textView">搜商品标题 领优惠券拿返现</text>
+					</view>
+					<image src="../../static/image/index/icon_top_01.png" class="headoper2" alt=""></image>
+					<image src="../../static/image/index/icon_top_02.png" class="headoper" alt="" @tap="goMessage"></image>
+				</view>
+				<scroll-view  class="headerBar" :scroll-x="true" show-scrollbar="false" scroll-with-animation="true" :scroll-left="scrollInto">
+					<view v-for="(tab,index) in tabnav"  v-if="tab.menu" :key="index" class="uni-tab-item" :data-current="index" @click="ontabtap(index)">
+						<text :class="[ 'uni-tab-item-title' ,tabIndex==index? 'uni-tab-item-title-active':''] " v-if="tab.menu">{{tab.menu[0].top}}</text>
+						<image v-if="tabIndex==index" class="tabimg" src="../../static/img/bolang.png"></image>
+						<image v-else class="tabimg" src="../../static/img/bolang_empty.png"></image>
+					</view>
+				</scroll-view>
+
+			</view>
+		</view>
+		<!-- #ifdef APP-PLUS-NVUE -->
+		<swiper :current="tabIndex" class="swiper-box" style="flex: 1;" :duration="300" @change="changeTab" >
+			<swiper-item class="swiper-item" v-for="(tab,index1) in tabnav" :key="index1">
+				<!-- <scroll-view class="scroll-v list" scroll-y @scrolltolower="loadMore(index1)"> -->
+				<waterfall show-scrollbar="false" column-count="2" left-gap="15" right-gap="15" column-gap="10" column-width="auto"
+				 @loadmore="loadMore(index1)" scroll="listScroll" loadmoreoffset="40" style="background-color: #f6f6f6;">
+					
+					<header style="background-color: #fff;">
+						<view v-if="index1==0">
+							<view class="indexSeiperBg" :style="styleObject">
+								<view class="indexSeiperBg_white"></view>
+								<swiper class="indexSeiper"  :current="currentImg"  :indicator-dots="true" :autoplay="isAutoplay" :circular="true" interval="3000"
+								 indicator-color="#rgba(0,0,0,.1)" indicator-active-color="#fff" @change="changeImg">
+									<swiper-item v-for="(img,i) in lunboData" :key="i">
+										<image class="indexSeiperItem" resize="cover" :src="img.imgUrl" @click="lunbotap(img.urltype,img.url)"></image>
+									</swiper-item>
+								</swiper>
+							</view>
+
+							<view class="navSubMenu-box" >
+								<view class="navSubMenu" >
+									<view class="menu_box" @click="gotoSubback()">
+										<image class="subMenuImg" src="/static/image/index/temp/subNav_01.png"></image>
+										<text class="menuName">超级返</text>
+									</view>
+									<view class="menu_box" @click="goMaijiaxiu">
+										<image class="subMenuImg" src="/static/image/index/maijiaxiu.png"></image>
+										<text class="menuName">买家秀</text>
+									</view>
+									<view class="menu_box">
+										<image class="subMenuImg" src="/static/image/index/temp/subNav_03.png"></image>
+										<text class="menuName">京东返利</text>
+									</view>
+									<view class="menu_box" @click="menu('./menu?id=4&title=聚划算')">
+										<image class="subMenuImg" src="/static/image/index/temp/subNav_04.png"></image>
+										<text class="menuName">聚划算</text>
+									</view>
+									<view class="menu_box" @click="menu('/pages/pdd/index/index')">
+										<image class="subMenuImg" src="/static/image/index/temp/subNav_05.png"></image>
+										<text class="menuName">拼多多</text>
+									</view>
+								</view>
+								<view class="navSubMenu" style="margin-top: 10px;">
+									<view class="menu_box" @click="menu('../fastBuy/index')">
+										<image class="subMenuImg" src="/static/image/index/temp/subNav_06.png"></image>
+										<text class="menuName">限时抢购</text>
+									</view>
+									<view class="menu_box" @click="menu('./menu?id=2&title=9.9包邮')">
+										<image class="subMenuImg" src="/static/image/index/temp/subNav_07.png"></image>
+										<text class="menuName">9.9包邮</text>
+									</view>
+									<!-- <view class="menu_box" @click="gotoWebView('../common/webView','https://mp.weixin.qq.com/mp/homepage?__biz=MzI4NjQ3NDQzOQ==&hid=3&sn=8f53c8b5c60fe86edd0db3f63748c887','商学院')">
+										<image class="subMenuImg" src="/static/image/index/temp/subNav_08.png"></image>
+										<text class="menuName">商学院</text>
+									</view> -->
+									<view class="menu_box" @click="menu('./rechargeCenter')">
+										<image class="subMenuImg" src="/static/image/index/temp/subNav_02.png"></image>
+										<text class="menuName">充值中心</text>
+									</view>
+									<view class="menu_box" @click="menu('./menu?id=1&title=高佣好货')">
+										<image class="subMenuImg" src="/static/image/index/temp/subNav_09.png"></image>
+										<text class="menuName">高佣好货</text>
+									</view>
+									<view class="menu_box" @click="gojskefu">
+										<image class="subMenuImg" src="/static/image/index/temp/subNav_10.png"></image>
+										<text class="menuName">在线客服</text>
+									</view>
+								</view>
+								<view class="swiper_notice">
+									<image class="notice_title" src="/static/image/index/bagua.png"></image>
+									<image class="notice_toutiao" src="/static/image/index/toutiao.png"></image>
+									<view class="notice_comtent">
+										<text class="notice_comtent_text">100集分宝=1元现金，满500集分宝可提现</text>
+									</view>
+								</view>
+							</view>
+					<!-- 		<view class="banner_row_01_box">
+								<text class="new_people_title">新人专区</text>
+								<view class="banner_img_box">
+									<image  class="banner_row_01_01" src="/static/image/index/temp/banner_row_01_01.png" @click="gotoWebView('../common/webView','https://mp.weixin.qq.com/mp/homepage?__biz=MzI4NjQ3NDQzOQ==&hid=1&sn=891b5bd9c9627f6f44a13d5b880253a7','新人必看')"></image>
+									<image  class="banner_row_01_02" src="/static/image/index/temp/banner_row_01_02.png"></image>
+								</view>
+							</view> -->
+							<view class="gaoyong_banner_box" @click="menu('./menu?id=1&title=高佣好货')">
+								<image class="gaoyong_banner" src="/static/image/index/gaoyong_banner.png" mode=""></image>
+								<!-- <image class="gaoyong_banner" src="/static/image/index/gifdongtu.gif" mode=""></image> -->
+							</view>
+							<view class="zhuanti_box">
+								<view class="zhuanti_title">
+									<image class="title_icon" src="/static/image/index/zhuanti_title_icon1.png" mode=""></image>
+									<text class="zhuanti_text">专题精选—实时优惠券快报</text>
+									<image class="title_icon" src="/static/image/index/zhaunti_title_icon2.png" mode=""></image>
+								</view>
+								<view class="zhuanti_list_box">
+									<view class="zhuanti_item"  @tap="menu('/pages/hotBuy/index')">
+										<image class="zhuanti_item_img" src="/static/image/index/zhuanti1.png"  mode=""></image>
+									</view>
+									<view class="zhuanti_item" @tap="menu('./menu?id=2&title=9.9包邮')">
+										<image class="zhuanti_item_img" src="/static/image/index/zhuanti2.png" mode=""></image>
+									</view>
+									<view class="zhuanti_item"  @tap="menu('/pages/brand/index')">
+										<image class="zhuanti_item_img" src="/static/image/index/zhuanti3.png" mode=""></image>
+									</view>
+									<view class="zhuanti_item"  @tap="menu('./menu?id=11&title=天猫包邮')">
+										<image class="zhuanti_item_img" src="/static/image/index/zhuanti4.png" mode=""></image>
+									</view>
+									<view class="zhuanti_item"  @tap="menu('/pages/fastBuy/index')">
+										<image class="zhuanti_item_img" src="/static/image/index/zhuanti5.png" mode=""></image>
+									</view>
+									<view class="zhuanti_item">
+										<image class="zhuanti_item_img" src="/static/image/index/zhuanti6.png" mode=""></image>
+									</view>
+								</view>
+							</view>
+							<view class="indexTitle_box">
+								<view class="indexTitle">
+									<image class="indexTitleIcon" src="/static/image/index/recommend.png" mode="widthFix"></image>
+								</view>
+							</view>
+						</view>
+						<view class="indexCate" v-else>
+							<view v-for="(menu,index) in tabnav[index1].menu" :key="index" class="indexCateItem" @click="content(menu.name,menu.top)">
+								<image class="indexCateImg" :src="menu.pic" alt=""></image>
+								<text class="indexCateTitle">{{menu.name}}</text>
+							</view>
+						</view>
+					</header>
+				<!--  #ifdef APP-PLUS -->
+					<refresh class="refresh" @refresh="onrefresh(index1)" @pullingdown="onpullingdown" :display="refreshing ? 'show' : 'hide'"
+					 :style="styleObject">
+						<div class="refresh-view">
+							<image class="loading-icon" src="../../static/img/lang.png"></image>
+							<text class="loading-text">{{refreshText}}</text>
+						</div>
+					</refresh>
+					<!-- #endif -->
+					<cell v-for="(item, row) in tab.subData" :key="row">
+						<!--  style="padding-top: 20rpx;" -->
+						<view class="goods-list" @tap="goodsDetail(item.itemId)">
+							<image class="lazy" :src="item.itemPic" alt=""></image>
+							<view class="goods-info">
+								<view class="goodstitle">
+									<image class="goodslaiyuan" v-if="item.shopType=='B'" src="../../static/img/tmall.png"></image>
+									<image class="goodslaiyuan" v-if="item.IsTmall=='C'" src="../../static/img/taobao.png"></image>
+									<text class="text title">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item.itemTitle}}</text>
+								</view>
+								<!-- 已登录 高级-->
+								<view>
+									<view>
+										<view class="goodslistbaseinfo">
+											<text class="zhuan"> 赚￥{{(item.tkRates*item.itemEndPrice*bili*allianceScale/100) | numFilter}}</text>
+											<view class="quanInfo0">
+												<!-- <image class="quanimg" src="../../static/img/youhuiquan.png"></image> -->
+												<view class="yj-quan">
+													<text class="yj-quan-before"></text>
+													<text class="yj-quan-after"></text>
+													<text class="yj-quan-txt">{{item.couponMoney | numFilter2}}元券</text>
+												</view>
+												<!-- <text class="quandata">{{item.Quan_price | numFilter2}}元券</text> -->
+											</view>
+										</view>
+									</view>
+
+
+									<view class="goodslistbaseinfo">
+										<view class="yt-index-flex">
+											<view class="yt-index-flex">
+												<text class="" style="font-size: 20rpx; color: #FD4C66; font-weight: bold;">&yen;</text>
+												<text class="cost">{{(item.itemPrice-item.couponMoney) | numFilter}}</text>
+											</view>
+											<text class="rice">&yen;{{item.itemPrice | numFilter}}</text>
+										</view>
+										<text class="sales">月销 {{item.itemSale}}</text>
+									</view>
+								</view>
+
+
+							</view>
+						</view>
+					</cell>
+					<header class="loading-more" v-if="loadmoredata">
+						<text class="loading-more-text">{{loadingText}}</text>
+					</header>
+				</waterfall>
+				<!-- </scroll-view> -->
+			</swiper-item>
+		</swiper>
+		<!-- #endif -->
+		<!-- #ifndef APP-PLUS-NVUE -->
+		<swiper :current="tabIndex" class="swiper-box" style="flex: 1;" :duration="300" @change="changeTab"  >
+			<swiper-item class="swiper-item" v-for="(tab,index1) in tabnav" :key="index1">
+				<scroll-view class="scroll-v list" scroll-y @scrolltolower="loadMore(index1)" style="height:500px ;">
+					<view class="waterfallVue" style="background-color: #f6f6f6;">
+						<view class="headerVue">
+							<view v-if="index1==0">
+								<!-- <view class="steps_position_box">
+									<view class="steps_bg_box">
+										<image src="/static/image/index/temp/banner_bg_02.jpg" class="steps_bg_image" alt="">
+									</view>
+									<view class="steps_bar_position">
+										<view class="steps_bar">
+											<view class="steps_gb">
+												<image src="/static/image/index/steps_bg.png" class="steps_gb_image" alt="">
+											</view>
+											<image @click="service" src="/static/image/index/steps_btn.png" class="steps_btn" alt="">
+										</view>
+									</view>
+								</view> -->
+								<view class="indexSeiperBg" :style="styleObject">
+									<view class="indexSeiperBg_white"></view>
+									<swiper class="indexSeiper" :indicator-dots="true" :autoplay="false" :circular="true" interval="3000"
+									 indicator-color="#fff" indicator-active-color="#FD4C66" @change="changeImg"   @transition="slideBanner">
+										<swiper-item v-for="(img,i) in lunboData" :key="i">
+											<image class="indexSeiperItem" resize="cover" :src="img.imgUrl" @click="lunbotap(img.urltype,img.url)"></image>
+										</swiper-item>
+									</swiper>
+								</view>
+								<view class="navSubMenu-box">
+									<view class="navSubMenu">
+										<view class="menu_box" @click="gotoSubback()">
+											<image class="subMenuImg" src="/static/image/index/temp/subNav_01.png"></image>
+											<text class="menuName">超级返</text>
+										</view>
+										<view class="menu_box" @click="goMaijiaxiu">
+											<image class="subMenuImg" src="/static/image/index/maijiaxiu.png"></image>
+											<text class="menuName">买家秀</text>
+										</view>
+										<view class="menu_box">
+											<image class="subMenuImg" src="/static/image/index/temp/subNav_03.png"></image>
+											<text class="menuName">京东</text>
+										</view>
+										<view class="menu_box" @click="menu('./menu?id=4&title=聚划算')">
+											<image class="subMenuImg" src="/static/image/index/temp/subNav_04.png"></image>
+											<text class="menuName">聚划算</text>
+										</view>
+										<view class="menu_box" @click="menu('/pages/pdd/index/index')">
+											<image class="subMenuImg" src="/static/image/index/temp/subNav_05.png"></image>
+											<text class="menuName">拼多多</text>
+										</view>
+									</view>
+									<view class="navSubMenu" style="margin-top: 10px;">
+										<view class="menu_box" @click="menu('../fastBuy/index')">
+											<image class="subMenuImg" src="/static/image/index/temp/subNav_06.png"></image>
+											<text class="menuName">限时抢购</text>
+										</view>
+										<view class="menu_box" @click="menu('./menu?id=2&title=9.9包邮')">
+											<image class="subMenuImg" src="/static/image/index/temp/subNav_07.png"></image>
+											<text class="menuName">9.9包邮</text>
+										</view>
+										<view class="menu_box" @click="menu('./rechargeCenter')">
+											<image class="subMenuImg" src="/static/image/index/temp/subNav_02.png"></image>
+											<text class="menuName">充值中心</text>
+										</view>
+										<!-- <view class="menu_box" @click="gotoWebView('../common/webView','https://mp.weixin.qq.com/mp/homepage?__biz=MzI4NjQ3NDQzOQ==&hid=3&sn=8f53c8b5c60fe86edd0db3f63748c887','商学院')">
+											<image class="subMenuImg" src="/static/image/index/temp/subNav_08.png"></image>
+											<text class="menuName">商学院</text>
+										</view> -->
+										<!-- <view class="menu_box" @click="appLaxin()">
+											<image class="subMenuImg" src="/static/image/index/temp/subNav_09.png"></image>
+											<text class="menuName">邀请赚钱</text>
+										</view> -->
+										<view class="menu_box" @click="menu('./menu?id=1&title=高佣好货')">
+											<image class="subMenuImg" src="/static/image/index/temp/subNav_09.png"></image>
+											<text class="menuName">高佣好货</text>
+										</view>
+										<view class="menu_box" @click="gojskefu">
+											<image class="subMenuImg" src="/static/image/index/temp/subNav_10.png"></image>
+											<text class="menuName">在线客服</text>
+										</view>
+									</view>
+									<view class="swiper_notice">
+										<image class="notice_title" src="/static/image/index/bagua.png"></image>
+										<image class="notice_toutiao" src="/static/image/index/toutiao.png"></image>
+										<view class="notice_comtent">
+											<text class="notice_comtent_text">100集分宝=1元现金，满500集分宝可提现</text>
+										</view>
+									</view>
+								</view>
+
+								<!-- <view class="banner_row_01_box">
+									<view class="new_people_title_box">
+										<text class="new_people_title">新人专区</text>
+									</view>
+									<view class="banner_img_box">
+										<image class="banner_row_01_01" src="/static/image/index/temp/banner_row_01_01.png" @click="gotoWebView('../common/webView','https://mp.weixin.qq.com/mp/homepage?__biz=MzI4NjQ3NDQzOQ==&hid=1&sn=891b5bd9c9627f6f44a13d5b880253a7','新人必看')"></image>
+										<image class="banner_row_01_02" src="/static/image/index/temp/banner_row_01_02.png"></image>
+									</view>
+								</view> -->
+								<view class="gaoyong_banner_box" @click="menu('./menu?id=1&title=高佣好货')">
+									<image class="gaoyong_banner" src="/static/image/index/gaoyong_banner.png" mode=""></image>
+									<!-- <image class="gaoyong_banner" src="/static/image/index/gifdongtu.gif" mode=""></image> -->
+								</view>
+								<view class="zhuanti_box">
+									<view class="zhuanti_title">
+										<image class="title_icon" src="/static/image/index/zhuanti_title_icon1.png" mode=""></image>
+										<text class="zhuanti_text">专题精选—实时优惠券快报</text>
+										<image class="title_icon" src="/static/image/index/zhaunti_title_icon2.png" mode=""></image>
+									</view>
+									<view class="zhuanti_list_box">
+										<view class="zhuanti_item"  @tap="menu('/pages/hotBuy/index')">
+											<image class="zhuanti_item_img" src="/static/image/index/zhuanti1.png"  mode=""></image>
+										</view>
+										<view class="zhuanti_item" @tap="menu('./menu?id=2&title=9.9包邮')">
+											<image class="zhuanti_item_img" src="/static/image/index/zhuanti2.png" mode=""></image>
+										</view>
+										<view class="zhuanti_item"  @tap="menu('/pages/brand/index')">
+											<image class="zhuanti_item_img" src="/static/image/index/zhuanti3.png" mode=""></image>
+										</view>
+										<view class="zhuanti_item"  @tap="menu('./menu?id=11&title=天猫包邮')">
+											<image class="zhuanti_item_img" src="/static/image/index/zhuanti4.png" mode=""></image>
+										</view>
+										<view class="zhuanti_item"  @tap="menu('/pages/fastBuy/index')">
+											<image class="zhuanti_item_img" src="/static/image/index/zhuanti5.png" mode=""></image>
+										</view>
+										<view class="zhuanti_item">
+											<image class="zhuanti_item_img" src="/static/image/index/zhuanti6.png" mode=""></image>
+										</view>
+									</view>
+								</view>
+								<view class="indexTitle_box">
+									<view class="indexTitle">
+										<image class="indexTitleIcon" src="/static/image/index/recommend.png" mode="widthFix"></image>
+									</view>
+								</view>
+
+							</view>
+							<view class="indexCate" v-else>
+								<view v-for="(menu,index) in tabnav[index1].menu" :key="index" class="indexCateItem" @click="content(menu.name,menu.top)">
+									<image class="indexCateImg" :src="menu.pic" alt=""></image>
+									<text class="indexCateTitle">{{menu.name}}</text>
+								</view>
+							</view>
+						</view>
+						<view v-for="(item, row) in tab.subData" :key="row">
+							<!--  style="padding-top: 20rpx;" -->
+							<view class="goods-list" @tap="goodsDetail(item.itemId)">
+								<image class="lazy" :src="item.itemPic" alt=""></image>
+								<view class="goods-info">
+									<view class="goodstitle">
+										<image class="goodslaiyuan" v-if="item.shopType=='B'" src="../../static/img/tmall.png"></image>
+										<image class="goodslaiyuan" v-if="item.IsTmall=='C'" src="../../static/img/taobao.png"></image>
+										<text class="text title">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item.itemTitle}}</text>
+									</view>
+									<!-- 已登录 高级-->
+									<view>
+										<view>
+											<view class="goodslistbaseinfo">
+												<text class="zhuan"> 赚￥{{(item.tkRates*item.itemEndPrice*bili*allianceScale/100) | numFilter}}</text>
+												<view class="quanInfo0">
+													<!-- <image class="quanimg" src="../../static/img/youhuiquan.png"></image> -->
+													<view class="yj-quan">
+														<text class="yj-quan-before"></text>
+														<text class="yj-quan-after"></text>
+														<text class="yj-quan-txt">{{item.couponMoney | numFilter2}}元券</text>
+													</view>
+													<!-- <text class="quandata">{{item.Quan_price | numFilter2}}元券</text> -->
+												</view>
+											</view>
+										</view>
+
+
+										<view class="goodslistbaseinfo">
+											<view class="yt-index-flex">
+												<view class="yt-index-flex">
+													<text class="" style="font-size: 20rpx; color: #FD4C66; font-weight: bold;">&yen;</text>
+													<text class="cost">{{(item.itemPrice-item.couponMoney) | numFilter}}</text>
+												</view>
+												<text class="rice">&yen;{{item.itemPrice | numFilter}}</text>
+											</view>
+											<text class="sales">月销 {{item.itemSale}}</text>
+										</view>
+									</view>
+
+
+								</view>
+							</view>
+						</view>
+					</view>
+				</scroll-view>
+			</swiper-item>
+		</swiper>
+		<!-- #endif -->
+		<!-- 		<view :class="['up-icon',isTop?'up-show':'']">
+			<image class="img-up" src="../../static/image/index/return-up.png"  mode="">
+				
+			</image>
+		</view> -->
+
+	</view>
+</template>
+<script>
+	var _self, baseurl;
+	//var myjs = require("../../static/js/my.js");$bindSystem
+	import $http from "@/common/request.js";
+	import $msg from "@/common/msg.js";
+	import $storage from "@/common/storage.js";
+	/* import $store from "@/store/index.js"; */
+	import $bindSystem from "@/common/bindSystem.js";
+	import $common from "@/common/common.js";
+	let statusBarHeight = uni.getSystemInfoSync().statusBarHeight
+	export default {
+		data() {
+			return {
+				isAutoplay:true,
+				statusBarHeight,
+				isTop: false,
+				tabIndex: 0,
+				tabnav: '',
+				scrollInto: "",
+				goodsConfig: [],
+				bili: 0, //默認比例
+				allianceScale: 0,
+				styleObject: {
+					//backgroundColor: "#ed4a69"
+					// backgroundImage: 'linear-gradient(to left,#ec466a, #f36d6e)'
+					backgroundColor:'#fff',
+					
+				},
+				currentImg:0,
+				bgUrl: '/static/image/index/temp/banner_bg_01.jpg',
+				refreshing: false,
+				refreshText: "下拉可以刷新",
+				loadmoredata: false,
+				loadingText: "加载更多...",
+				lunboData: [], //轮播图
+				isbindBc: false,
+
+				navigateFlag: false,
+				pulling: false,
+				isIos: false,
+				header: '',
+				uid: '',
+				newsMenu: '', //其他页面二级分类 如：女装 分类
+				hotGoods: '', //今日热销
+				newsData: '', //推荐商品
+				newsList: [],
+				cacheTab: [],
+				isReview: 0,
+			}
+		},
+
+		onShow: function() {
+			// if (uni.getSystemInfoSync().platform == "android" && !uni.getStorageSync('isAgree')) {
+				
+			// 	plus.webview.open('/hybrid/html/popup/xieyi.html',
+			// 		'xieyi', {
+			// 		background: 'transparent',
+			// 		bottom: 0,
+			// 		zindex: 9999
+			// 	});
+			// }
+			
+		},
+		onLoad: function() {
+			this.lunboInfo();
+			this.indexContent();
+			this.mybili();
+			this.isReview = $storage.get('isReview');
+			// $common.getCopy()
+		},
+		filters: {
+
+			numFilter(value) {
+				// 截取当前数据到小数点后两位
+				let realVal = parseFloat(parseFloat(value).toFixed(2));
+				// num.toFixed(2)获取的是字符串
+				return realVal
+			},
+			numFilter2(value) {
+				// 截取当前数据到小数点后两位
+				let realVal2 = parseInt(value);
+				// num.toFixed(2)获取的是字符串
+				return realVal2
+			}
+		},
+		methods: {
+			goMaijiaxiu()  {
+				console.log(213)
+				$msg.alert({
+					title:'提示',
+					content: '功能正在开发中，敬请期待',
+					confirmColor:'#333333',
+				})
+			},
+			listScroll: function (e) {
+				// console.log(e.contentOffset.y)
+				// if(e.contentOffset.y < 0) {
+				// 	this.isTop = true
+
+				// }else {
+				// 	this.isTop = false
+				// }	
+			},
+			
+			//消息中心
+			gojskefu() {
+				let isLogin = this.$store.state.token
+				console.log(isLogin)
+				if (isLogin) {
+					$common.getJXKefu()
+				} else {
+					uni.navigateTo({
+						url: "/pages/pass/login"
+					});
+				}
+			},
+			goMessage() {
+				let isLogin = this.$store.state.token
+				if (isLogin) {
+					uni.navigateTo({
+						url: '/pages/user/message'
+					})
+				} else {
+					uni.navigateTo({
+						url: "/pages/pass/login"
+					});
+				}
+			},
+			lunboInfo: function() {
+				let data = [{
+						"id": 26,
+						"title": null,
+						"url": "/pages/fastBuy/index",
+						"urlpic": "banner.jpg",
+						"bgcolor": "#c83af0",
+						"imgUrl": "/static/image/index/temp/banner01.jpg",
+						"urltype": 1
+					},
+					{
+						"id": 26,
+						"title": null,
+						"url": "/pages/search/content?search=年货&type=0",
+						"urlpic": "banner.jpg",
+						"bgcolor": "#8d010c",
+						"imgUrl": "/static/image/index/temp/banner02.jpg",
+						"urltype": 1
+					},
+					{
+						"id": 26,
+						"title": null,
+						"url": "/pages/brand/index",
+						"urlpic": "banner.jpg",
+						"bgcolor": "#681823",
+						"imgUrl": "/static/image/index/temp/banner03.jpg",
+						"urltype": 1
+					},
+					{
+						"id": 26,
+						"title": null,
+						"url": "/pages/search/content?search=数码&type=0",
+						"urlpic": "banner.jpg",
+						"bgcolor": "#2c474a",
+						"imgUrl": "/static/image/index/temp/banner04.jpg",
+						"urltype": 1
+					},
+				];
+				if ($storage.get('isReview')) {
+					data[0].imgUrl = '/static/temp/banner1.png';
+					data[0].url = '/pages/detail/index?itemId=601315736816';
+				}
+				this.lunboData = data;
+				this.styleObject.backgroundColor = this.lunboData[0].bgcolor;
+
+			},
+			//轮播图变色
+			changeImg: function(e) {
+				this.currentImg = e.detail.current
+				this.styleObject.backgroundColor = this.lunboData[e.detail.current].bgcolor;
+			},
+			//点击轮播图
+			lunbotap: function(e, a) {
+				//判断该轮播图是外链 还是商品# id
+				if (e == '0') {
+					uni.navigateTo({
+						url: "./webview?url=" + a
+					})
+				} else {
+					uni.navigateTo({
+						url: a
+					})
+				}
+				/* uni.navigateTo({
+					url: '../detail/index?goodsid=570906875813'
+				}) */
+			},
+			getIndexData: function(postins) {
+				$http.post('/api/goods/getList', postins)
+					.then(res => {
+						if (res.data.list.length > 0) {
+							// res.data.list.map((v, i) => {
+							// 	res.data.list[i].itemPic = $common.imgThumbAli(v.itemPic);
+							// });
+							this.tabnav[postins.cid].subData = this.tabnav[postins.cid].subData.concat(res.data.list)
+							this.goodsConfig[postins.cid].minId = res.data.minId
+						}
+
+					})
+
+			},
+			//首页数据
+			indexContent: function() {
+				$http.post('/api/goods/getCates')
+					.then(res => {
+						let nav = [{
+							cid: 0,
+							top: "精选"
+						}]
+						this.$set(res.data.list, 0, nav)
+						Object.keys(res.data.list).forEach((v, i) => {
+							this.goodsConfig.push({
+								type: 1,
+								minId: 1,
+								sort: 9,
+								cid: i
+							})
+							let data = {
+								menu: res.data.list[i],
+								subData: []
+							}
+							res.data.list[i] = data
+						})
+						//console.log(res.data.list)
+						this.tabnav = res.data.list
+						console.log(this.tabnav)
+						this.getIndexData(this.goodsConfig[0]);
+
+					})
+
+
+			},
+			search: function() {
+				uni.navigateTo({
+					url: '../search/index'
+				});
+			},
+			service: function() {
+				uni.navigateTo({
+					url: "./newscourse"
+				})
+			},
+			appLaxin: function() {
+				uni.navigateTo({
+					url: "../activity/laxin/index"
+				})
+			},
+			//商品筛选类型：type=1是今日上新（当天新券商品），type=2是9.9包邮，type=3是30元封顶，type=4是聚划算，type=5是淘抢购，type=6是0点过夜单，type=7是预告单，type=8是品牌单，type=9是天猫商品，type=10是视频单，type=11是天猫超市单，type=12是偏远地区包邮单，type=13是双十一定金单
+			menu: function(e) {
+				uni.navigateTo({
+					url: e
+				})
+			},
+			gotoWebView(page, url, title) {
+				uni.navigateTo({
+					url: page + '?url=' + encodeURIComponent(url) + '&title=' + title,
+				})
+			},
+			tianmao: function(e) {
+				uni.navigateTo({
+					url: './tianmao?url=' + e
+				});
+			},
+			//类目
+			content: function(name,top) {
+				if(top.includes('男')||top.includes('女')||top.includes('儿')) {
+					uni.navigateTo({
+						url: '../search/content?search=' + top  + name
+					})
+				}else {
+					uni.navigateTo({
+						url: '../search/content?search='+ name
+					})
+				}
+				
+			},
+
+			mybili: function() {
+				$http.post('/api/index/getScale')
+					.then(res => {
+						this.bili = res.data.scale
+						this.allianceScale = res.data.allianceScale
+					})
+
+			},
+
+			// goMaijiaxiu: function() {
+			// 	$msg.toast('开发中，敬请期待');
+			// },
+			gotoSubback: function() {
+				$bindSystem.checkBindTaoBao('pages/index/index', {
+					gotoURL: 'pages/superBack/index'
+				})
+			},
+			goodsDetail: function(itemId) {
+				uni.navigateTo({
+					url: "../detail/index?itemId=" + itemId
+				});
+			},
+
+
+			//选中的当前页面
+			async changeTab(e) {
+				let index = e.detail.current;
+				this.switchTab(index);
+
+				if (this.tabnav[index].subData.length == 0) {
+					this.getIndexData(this.goodsConfig[index])
+				}
+
+
+			},
+			ontabtap(i) {
+				let index = i;
+				this.switchTab(index);
+				if (this.tabnav[index].subData.length == 0) {
+					this.getIndexData(this.goodsConfig[index])
+				}
+			},
+
+			switchTab(index) {
+				this.tabIndex = index;
+				let scrollData = (this.goodsConfig[index].cid - 3) * 60;
+				if (scrollData < 0) {
+					scrollData = 0
+				}
+				if (scrollData > (this.goodsConfig.length * 60)) {
+					scrollData = this.goodsConfig.length * 60
+				}
+				this.scrollInto = scrollData
+			},
+			//下拉加载更多
+			loadMore(e) {
+				this.loadmoredata = true;
+				if (this.goodsConfig[e].minId == 0) {
+					this.loadingText = '已加载全部'
+				} else {
+					this.getIndexData(this.goodsConfig[e])
+					this.loadingText = '正在加载'
+				}
+
+			},
+
+			onrefresh(e) {
+				if (!this.refreshFlag) {
+					return;
+				}
+				console.log(e)
+				this.goodsConfig[e].minId = 1
+				this.tabnav[e].subData = []
+				this.getIndexData(this.goodsConfig[e]);
+				//this.indexContent();
+				this.refreshing = true;
+				this.refreshText = "正在刷新...";
+
+				this.pulling = true;
+				setTimeout(() => { // TODO fix ios和Android 动画时间相反问题
+					this.refreshing = false;
+					this.refreshText = "已刷新";
+					this.pulling = false;
+					// this.isAutoplay = true
+				}, 500);
+			},
+			onpullingdown(e) {
+				if (this.refreshing || this.pulling) {
+					return;
+				}
+				if (Math.abs(e.pullingDistance) > Math.abs(e.viewHeight)) {
+					this.refreshFlag = true;
+					this.refreshText = "释放立即刷新";
+				} else {
+					this.currentImg = 0
+					this.styleObject.backgroundColor = this.lunboData[this.currentImg].bgcolor;
+					// this.isAutoplay = false
+					this.refreshFlag = false;
+					this.refreshText = "下拉可以刷新";
+				}
+			},
+
+		},
+
+	}
+</script>
+
+<style lang="less">
+	@import "../../static/css/var.less";
+
+	.img-up {
+		width: 48upx;
+		height: 48upx;
+	}
+
+	.status_bar {
+		width: 100%;
+	}
+
+	.up-icon {
+		color: #a9a9a9;
+		width: 72rpx;
+		height: 72rpx;
+		border-radius: 72rpx;
+		border-color: #a9a9a9;
+		border-width: 2rpx;
+		background-color: #fff;
+		position: fixed;
+		right: 0;
+		bottom: 100rpx;
+		align-items: center;
+		justify-content: center;
+		transform: translateX(72rpx);
+		opacity: 1;
+		transition-duration: 0.4s;
+		transition-property: transform, opacity;
+		transition-delay: 0.3s
+	}
+
+	.up-show {
+		transform: translateX(-50rpx);
+		opacity: 0.9;
+	}
+
+	/* #ifndef APP-PLUS */
+	page {
+		width: 100%;
+		min-height: 100%;
+		display: flex;
+	}
+
+	/* #endif */
+	.search {
+		padding: 20rpx 30rpx 10rpx;
+		flex-direction: row;
+		align-items: center;
+
+	}
+
+	.searchDiv {
+		flex: 1;
+		flex-direction: row;
+		border-radius: 40rpx;
+		background-color: #fff;
+		height: 60rpx;
+		align-items: center;
+	}
+
+	.search-images {
+		width: 37rpx;
+		height: 37rpx;
+		margin-left: 26rpx;
+	}
+
+	.headoper {
+		width: 44rpx;
+		height: 44rpx;
+		margin-left: 20rpx;
+	}
+
+	.headoper2 {
+		width: 44rpx;
+		height: 44rpx;
+		margin-left: 20rpx;
+	}
+
+	.textView {
+		font-size: 25rpx;
+		padding-left: 10rpx;
+		color: #999;
+	}
+
+	.tabs {
+		flex: 1;
+		flex-direction: column;
+		overflow: hidden;
+		background-color: #fff;
+		/* #ifdef MP-ALIPAY || MP-BAIDU */
+		height: 100vh;
+		/* #endif */
+	}
+
+	.headerBar {
+		width: 750upx;
+		height: 80upx;
+		color: #fff;
+		flex-direction: row;
+		/* #ifndef APP-PLUS */
+		white-space: nowrap;
+		/* #endif */
+	}
+
+	.topBar {
+		position: relative;
+		width: 750rpx;
+		// height: 243rpx;
+		background-color: #ed4e6a;
+
+	}
+
+	.bg_image {
+		width: 750rpx;
+		height: 243rpx;
+	}
+
+	.positionTop {
+		// position:absolute;
+		// top:0;
+		// left:0;
+	}
+
+	.steps_position_box {
+		height: 94rpx;
+		width: 750rpx;
+		position: relative;
+	}
+
+	.steps_bg_image {
+		width: 750rpx;
+		height: 94rpx;
+	}
+
+	.steps_bar_position {
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+
+	.steps_bar {
+		position: relative;
+		height: 94rpx;
+		width: 750rpx;
+	}
+
+	.steps_gb {
+		height: 94rpx;
+		width: 750rpx;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.steps_gb_image {
+		height: 70rpx;
+		width: 700rpx;
+	}
+
+	.steps_btn {
+		width: 120rpx;
+		height: 40rpx;
+		position: absolute;
+		top: 50rpx;
+		right: 20rpx;
+	}
+
+	.swiper_notice {
+		height: 28rpx;
+		flex-direction: row;
+		margin-top: 36rpx;
+	}
+
+	.notice_title {
+		width: 117rpx;
+		height: 28rpx;
+		margin-left: 23rpx;
+		margin-right: 18rpx;
+	}
+
+	.notice_toutiao {
+		width: 56rpx;
+		height: 28rpx;
+		margin-right: 32rpx;
+	}
+
+	.notice_comtent {
+		flex: 1;
+		height: 28rpx;
+	}
+
+	.notice_comtent_text {
+		font-size: 24rpx;
+		height: 28rpx;
+		line-height: 28rpx;
+	}
+
+	.navSubMenu-box {
+		margin-top: 30rpx;
+		width: 710upx;
+		border-width: 2rpx;
+		border-color: rgba(85, 85, 85, 0.2);
+		// box-shadow: 0 0 16rpx 0 rgba(85, 85, 85, 0.2);
+		margin-left: 21rpx;
+		padding-top: 10rpx;
+		padding-bottom: 18rpx;
+		border-radius: 16rpx;
+
+	}
+
+	.navSubMenu {
+		flex-direction: row;
+		justify-content: space-around;
+		align-items: center;
+		flex-wrap: wrap;
+	}
+
+	.menu_box {
+		width: 100rpx;
+	}
+
+	.subMenuImg {
+		width: 100rpx;
+		height: 100rpx;
+	}
+
+	.menuName {
+		width: 100rpx;
+		text-align: center;
+		font-size: 24rpx;
+		color: #58595b;
+	}
+
+	.banner_row_01_box {
+		border-radius: 24rpx;
+		width: 702rpx;
+		margin-top: 28rpx;
+		padding-left: 12rpx;
+		padding-right: 12rpx;
+		padding-bottom: 10rpx;
+		background-color: #fde475;
+		margin-left: 24rpx;
+	}
+
+	.new_people_title_box {
+		flex-direction: row;
+		justify-content: center;
+		flex: 1;
+	}
+
+	.new_people_title {
+		text-align: center;
+		height: 56rpx;
+		line-height: 56rpx;
+		font-size: 30rpx;
+		font-weight: 800;
+		color: #F27053;
+	}
+
+	.banner_img_box {
+		flex-direction: row;
+		flex: 1;
+		justify-content: space-between;
+	}
+
+	.banner_row_01_01 {
+		width: 332rpx;
+		height: 158rpx;
+	}
+
+	.banner_row_01_02 {
+		width: 332rpx;
+		height: 158rpx;
+	}
+
+	.gaoyong_banner_box {
+		padding: 0 3rpx;
+		height: 208rpx;
+		margin-top: 20rpx;
+		flex-direction: row;
+		align-items: center;
+		background-color: #fff;
+	}
+
+	.gaoyong_banner {
+		width: 740rpx;
+		height: 100%;
+	}
+
+	.zhuanti_box {
+		// flex-direction: row;
+		background-color: #fff;
+		padding-bottom: 10rpx;
+	}
+
+	.zhuanti_title {
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+		height: 26rpx;
+		margin-top: 14rpx;
+		flex: 1;
+	}
+
+	.title_icon {
+		width: 47rpx;
+		height: 18rpx;
+	}
+
+	.zhuanti_text {
+		font-size: 26rpx;
+		color: #B980F3;
+		font-weight: 800;
+		margin: 0 8rpx;
+	}
+
+	.zhuanti_list_box {
+		padding: 0 15rpx;
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		margin-top: 10rpx;
+
+	}
+
+	.zhuanti_item {
+		width: 350rpx;
+		height: 160rpx;
+		margin-bottom: 12rpx;
+
+	}
+
+	.zhuanti_item_img {
+		width: 350rpx;
+		height: 160rpx;
+		border-radius: 14rpx;
+		border-color:rgba(223, 232, 235, 1) ;
+		border-width: 2rpx;
+		// box-shadow: 0px 0px 10rpx 0px rgba(223, 232, 235, 1);
+	}
+
+	.banner_row_02 {
+		width: 750rpx;
+		height: 143rpx;
+	}
+
+	.sub_row_title {
+		width: 750rpx;
+		height: 67rpx;
+	}
+
+	.banner_row_03_bar {
+		padding: 0 15rpx;
+		flex-direction: row;
+	}
+
+	.banner_row_03_01_box {
+		background-color: #f4f4f4;
+		width: 361rpx;
+		height: 271rpx;
+		border-top-left-radius: 10rpx;
+		justify-content: center;
+		margin-right: 2rpx;
+	}
+
+	.banner_row_03_02_box {
+		background-color: #f4f4f4;
+		width: 361rpx;
+		height: 271rpx;
+		border-top-right-radius: 10rpx;
+		justify-content: center;
+	}
+
+	.banner_row_03 {
+		width: 360rpx;
+		height: 271rpx;
+	}
+
+	.banner_row_04_bar {
+		flex-direction: row;
+		padding: 0 15rpx;
+		margin-top: 1px;
+	}
+
+	.banner_row_04_01_box {
+		background-color: #f4f4f4;
+		width: 180rpx;
+		height: 263rpx;
+		border-bottom-left-radius: 10rpx;
+		justify-content: center;
+		margin-right: 1px;
+	}
+
+	.banner_row_04_02_box {
+		background-color: #f4f4f4;
+		width: 180rpx;
+		height: 263rpx;
+		justify-content: center;
+		margin-right: 1px;
+	}
+
+	.banner_row_04_03_box {
+		background-color: #f4f4f4;
+		width: 180rpx;
+		height: 263rpx;
+		justify-content: center;
+		margin-right: 1px;
+	}
+
+	.banner_row_04_04_box {
+		background-color: #f4f4f4;
+		width: 180rpx;
+		height: 263rpx;
+		border-bottom-right-radius: 10rpx;
+		justify-content: center;
+	}
+
+	.banner_row_04 {
+		width: 180rpx;
+		height: 263rpx;
+	}
+
+	.uni-tab-item {
+		/* #ifndef APP-PLUS */
+		display: inline-block;
+		/* #endif */
+		flex-wrap: nowrap;
+		// padding-left: 30upx;
+		// padding-right: 30upx;
+		align-items: center;
+		justify-content: center;
+		width: 120rpx;;
+	}
+
+
+	.uni-tab-item-title-active {
+		font-size:32rpx;
+		font-weight:bold;
+	}
+	.uni-tab-item-title {
+		height: 60rpx;
+		line-height: 70rpx;
+		font-size: 28rpx;
+		color: #fff;
+	}
+
+	.tabimg {
+		width: 53rpx;
+		height: 9rpx;
+	}
+
+	.swiper-box {
+		flex: 1;
+	}
+
+	.swiper-item {
+		flex: 1;
+	}
+
+	.scroll-v {
+		flex: 1;
+		/* #ifndef MP-ALIPAY */
+		flex-direction: column;
+		/* #endif */
+		width: 750upx;
+	}
+
+
+
+	.refresh {
+		width: 750upx;
+		height: 64px;
+		justify-content: center;
+
+	}
+
+	.refresh-view {
+		flex-direction: row;
+		flex-wrap: nowrap;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.refresh-icon {
+		width: 32px;
+		height: 32px;
+		transition-duration: .5s;
+		transition-property: transform;
+		transform: rotate(0deg);
+		transform-origin: 16px 16px;
+	}
+
+	.refresh-icon-active {
+		transform: rotate(180deg);
+	}
+
+	.loading-icon {
+		width: 20px;
+		height: 20px;
+		margin-right: 5px;
+	}
+
+	.loading-icon-active {
+		transform: rotate(21600deg);
+	}
+
+	.loading-text {
+		margin-left: 5rpx;
+		font-size: 32rpx;
+		color: #fff;
+	}
+
+	.loading-more {
+		align-items: center;
+		justify-content: center;
+		padding-top: 10px;
+		padding-bottom: 10px;
+		text-align: center;
+	}
+
+	.loading-more-text {
+		font-size: 28upx;
+		color: #999;
+	}
+
+
+
+	/* 轮播图  */
+	.indexSeiperBg {
+		position: relative;
+		// background-image: linear-gradient(to left, #ec466a, #f36d6e);
+
+	}
+
+	.indexSeiper {
+		width: 690rpx;
+		margin: 0 30rpx;
+		height: 300rpx;
+		border-radius: 10rpx;
+		position: relative;
+		/* #ifndef APP-PLUS */
+		//box-shadow:0rpx 0rpx 20rpx #505050;
+		/* #endif */
+	}
+
+	.indexSeiperItem {
+		width: 690rpx;
+		height: 300rpx;
+		border-radius: 10rpx;
+	}
+
+	.indexSeiperBg_white {
+		width: 800rpx;
+		height: 200rpx;
+		border-radius: 800rpx;
+		background-color: #fff;
+		position: absolute;
+		bottom: -90rpx;
+		left: -25rpx;
+	}
+
+	/* z主菜单 */
+	.indexMeau {
+		width: 690rpx;
+		margin: 50rpx 30rpx 0;
+		background-color: #fff;
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: space-between;
+	}
+
+	.indexMeauItem {
+		width: 120rpx;
+		height: 125rpx;
+		margin-bottom: 30rpx;
+		align-items: center;
+	}
+
+	.indexMeauImg {
+		width: 90rpx;
+		height: 90rpx;
+	}
+
+	.indexMeauTitle {
+		color: #666;
+		margin-top: 10rpx;
+		margin-bottom: 10rpx;
+		font-size: 24rpx;
+		text-align: center;
+	}
+
+	/* 精选推荐  */
+	.indexTitle_box {
+		padding-top: 20rpx;
+		background-color: #f6f6f6;
+	}
+
+	.indexTitle {
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+		height: 112rpx;
+		background-color: #fff;
+	}
+
+	.indexTitleIcon {
+		width: 350rpx;
+		height: 52rpx;
+	}
+
+	.indexTitleTxt {
+		padding: 0 15rpx;
+		font-size: 36rpx;
+		color: #333;
+		font-weight: bold;
+	}
+
+
+	/* 商品详情 */
+
+	.yj-relative {
+		position: relative;
+	}
+
+	.goodslistbaseinfo {
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+		margin-top: 15rpx;
+	}
+
+	.yt-index-flex {
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.yj-quan {
+		position: relative;
+		border-radius: 10rpx;
+		height: 40rpx;
+		/* width: 60rpx; */
+		text-align: center;
+		padding: 0 16rpx;
+		background-image: linear-gradient(to right, #FF778B, #FD4D66);
+
+	}
+
+	.yj-quan-txt {
+		color: #fff;
+		line-height: 40rpx;
+		font-size: 22rpx;
+		position: relative;
+	}
+
+	.yj-quan-before,
+	.yj-quan-after {
+		position: absolute;
+		width: 14rpx;
+		height: 14rpx;
+		border-radius: 14rpx;
+		z-index: 99;
+		background-color: #fff;
+		top: 14rpx;
+	}
+
+	.yj-quan-before {
+		left: -7rpx;
+	}
+
+	.yj-quan-after {
+		right: -7rpx;
+	}
+
+	.zhuan {
+		padding: 0 10rpx;
+		height: 32rpx;
+		line-height: 32rpx;
+		border-radius: 4rpx;
+		font-size: 22rpx;
+		color: #FD4C66;
+		border-width: 1rpx;
+		border-color: #FD4C66;
+	}
+
+	.goods-list {
+		background-color: #fff;
+		border-radius: 10rpx;
+		overflow: hidden;
+		margin-top: 20rpx;
+	}
+
+	.title {
+		height: 60rpx;
+		line-height: 30rpx;
+		font-size: 26rpx;
+		color: #333;
+		font-weight: bold;
+	}
+
+	.goodstitle {
+		position: relative;
+	}
+
+	.goodslaiyuan {
+		width: 30rpx;
+		height: 30rpx;
+		position: absolute;
+		left: 0;
+		top: 0;
+	}
+
+	.cost {
+		font-family: PingFang-SC-Regular;
+		font-weight: bold;
+		color: #FD4C66;
+		font-weight: 900;
+		font-size: 36rpx;
+	}
+
+	.rice {
+		color: #999;
+		font-size: 20rpx;
+		text-decoration: line-through;
+	}
+
+	.sales {
+		color: #999;
+		font-size: 20rpx;
+	}
+
+	.goods-info {
+		width: 335rpx;
+		padding: 20rpx;
+	}
+
+	.lazy {
+		width: 335rpx;
+		height: 335rpx;
+	}
+
+	.indexCate {
+		width: 750rpx;
+		background-color: #fff;
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		padding: 0 30rpx;
+	}
+
+
+	.indexCateItem {
+		width: 150rpx;
+		padding: 30rpx 0;
+		align-items: center;
+	}
+
+	.indexCateImg {
+		width: 110rpx;
+		height: 110rpx;
+	}
+
+	.indexCateTitle {
+		color: #666;
+		margin-top: 10rpx;
+		margin-bottom: 10rpx;
+		font-size: 24rpx;
+		text-align: center;
+	}
+</style>

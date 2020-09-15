@@ -1,0 +1,200 @@
+<template>
+	<view class="goodsBar" v-if="dataItem.itemId" @click="click">
+		<view class="goodsList">
+			<image :src="dataItem.itemPic" class="picBox" />
+			<view class="goodsInfoBox">
+				<view class="titleBox">
+					<image src="/static/image/common/tmall.png" class="titleIcon" />
+					<view class="titleIcon"><text class="titleIconTag">拼多多</text></view>
+					<text class="goodsTitle">&#12288;&#12288;&#12288;&#12288;{{dataItem.itemTitle}}</text>
+				</view>
+				<view class="couponeBox">
+					<view class="couponBg">
+						<text class="couponText">券 减{{dataItem.couponMoney}}</text>
+					</view>
+					<view class="zhuanBox">
+						<text class="zhuanText">赚￥{{dataItem.zhuan}}</text>
+					</view>
+				</view>
+				<view class="oldMoneyBox">
+					<text class="oldMoneyLaft">￥{{dataItem.itemGroupPrice}}</text>
+					<text class="oldMoneyRight">已抢{{dataItem.itemSale}}件</text>
+				</view>
+				<view class="couponeMoneyBox">
+					<view class="couponeMoney">
+						<text class="couponeMoneyText">券后￥</text><text class="bigMoney">{{itemEndPrice}}</text>
+					</view>
+					<view class="nowBayBtn">
+						<text class="nowBayBtnText">马上抢</text>
+					</view>
+				</view>
+			</view>
+		</view>
+	</view>
+</template>
+
+<script>
+    export default {
+        props: {
+            dataItem: {
+                type: Object,
+                default: function(e) {
+                    return {}
+                }
+            }
+        },
+        methods: {
+            click() {
+                this.$emit('click');
+            },
+        },
+		computed: {
+			itemEndPrice: function() {
+				let Price = this.dataItem.itemGroupPrice - this.dataItem.couponMoney
+				return parseFloat(Price).toFixed(2)
+			}
+		},
+    }
+</script>
+
+<style scoped>
+	
+	/* 商品样式 */
+	.goodsBar{
+		padding: 10rpx;
+	}
+	.goodsList{
+		background-color: #ffffff;
+		padding: 20rpx;
+		border-radius: 10rpx;
+		flex-direction: row;
+		align-items: center;
+	}
+	.picBox{
+		width: 250rpx;
+		height:250rpx;
+		margin-right:10rpx;
+	}
+	.goodsInfoBox{
+		width: 430rpx;
+		padding: 20rpx;
+	}
+	.couponeBox,.oldMoneyBox,.couponeMoneyBox{
+		flex-direction: row;
+		width: 410rpx;
+	}
+	.couponeBox{
+		justify-content: space-between;
+	}
+	.titleBox{
+		position: relative;
+		flex-direction: column;
+		margin-top: 20rpx;
+	}
+	.hotTitleBox{
+		flex-direction: row;
+	}
+	.titleSale{
+		font-size: 32rpx;
+		font-weight: bold;
+	}
+	.titleTextActive{
+		font-size: 32rpx;
+		font-weight: bold;
+		color:#ff6e48;
+	}
+	.titleIcon{
+		width: 80rpx;
+		height:30rpx;
+		margin-right: 10rpx;
+		/* #ifdef H5 */
+			display: flex;
+		/* #endif */
+		background-color:#f52d2b;
+		justify-content: center;
+		align-items: center;
+		position: absolute;
+		left:0;
+		top:0;
+	}
+	.titleIconTag{
+		font-size: 20rpx;
+		color: #ffffff;
+	}
+	.goodsTitle{
+		text-overflow:ellipsis;
+		lines:2;
+		font-size: 28rpx;
+		 /* #ifdef H5 */
+			text-indent:130rpx;
+			display: -webkit-box;
+			-webkit-box-orient: vertical;
+			-webkit-line-clamp:2;
+			overflow:hidden;
+		/* #endif */
+	}
+
+	.couponBg{
+		margin-top: 20rpx;
+		background-image: linear-gradient(to left,#ff5453, #ff6e48);
+		border-radius: 10rpx;
+		margin-right: 20rpx;
+	}
+	.couponText{
+		font-size: 24rpx;
+		color:#ffffff;
+		padding:5rpx 10rpx;
+		text-align: center;
+	}
+	.zhuanBox{
+		margin-top: 20rpx;
+		border-radius: 10rpx;
+		background-color: #fcfffa;
+		border-style:solid;
+		border-width:1px;
+		border-color: #d47926;
+		
+	}
+	.zhuanText{
+		font-size: 24rpx;
+		color:#d2886c;
+		padding:5rpx 10rpx;
+		text-align: center;
+	}
+	.oldMoneyBox,.couponeMoneyBox{
+		margin-top: 20rpx;
+		justify-content: space-between;
+	}
+	
+	.oldMoneyLaft{
+		font-size: 24rpx;
+		color:#797979;
+		text-align: left;
+	}
+	.oldMoneyRight{
+		font-size: 24rpx;
+		color:#797979;
+		text-align: right;
+	}
+	.couponeMoneyText{
+		color:#fb4a63;
+		font-size: 24rpx;
+	}
+	.bigMoney{
+		font-size: 36rpx;
+		color:#fb4a63;
+	}
+	.nowBayBtn{
+		padding:10rpx 20rpx;
+		background-image: linear-gradient(to left,#ff5453, #ff6e48);
+		border-radius: 10rpx;
+	}
+	.couponeMoney{
+		flex-direction: row;
+		align-items: center;
+	}
+	.nowBayBtnText{
+		color:#ffffff;
+		font-size: 28rpx;
+	}
+</style>

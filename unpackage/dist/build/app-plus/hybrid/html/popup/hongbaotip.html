@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="content-type" content="text/html" >
+	<meta http-equiv="Pragma" content="no-cache">
+	<meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,width=device-width"/>
+	<meta name="app-mobile-web-app-capable"  content="yes" />
+	<meta name="app-mobile-web-app-status-bar-style" content="black-translucent" /> 
+	<title>搜索</title>
+	<style type="text/css">
+		
+		html,body,p{
+			margin: 0;
+			padding: 0;
+			width: 100%;
+			height: 100%;
+		}
+		.yt-popup-bg{
+			position: fixed;
+			width: 100%;
+			height: 100%;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background-color: rgba(0,0,0,.4);
+			z-index: 10;
+		}
+		.yt-popup-con{
+			width: 80%;
+			height: 60vh;
+			position: absolute;
+			top: 0;
+			left: 0;
+			bottom: 0;
+			right: 0;
+			margin: auto;
+		}
+		.yt-popup-con img{
+			vertical-align: middle;
+		}
+		/* .yt-popup-title{
+			position: absolute;
+			top: 7.5rem;
+			left: 30px;
+			font-size: 60px;
+			color: #fff;
+		} */
+		.yt-popup-main{
+			background-image: linear-gradient(180deg,#ff5249,#FF315B);
+			padding:1rem;
+			border-bottom-right-radius: 1.5rem;
+			border-bottom-left-radius: 1.5rem;
+			font-size: 1rem;
+			margin-top: -2px;
+		}
+		.yt-popup-info{
+			width: 88%;
+			height: auto;
+			max-height: 100px;
+			overflow: auto;
+			padding:1rem;
+			text-align: center;
+			margin:0 auto;
+			background-color: rgba(255,255,255,.4);
+			border-radius: .5rem;
+			color: #666;
+			font-size: .9rem;
+		}
+		.yt-popup-confirm{
+			text-align: center;
+			margin-top: 1rem;
+		}
+		.yt-popup-note-center{
+			text-align: center;
+			color: #666;
+			margin-top: .8rem;
+			font-size: .9rem;
+		}
+	</style>
+</head>
+<body>
+	<div class="yt-popup-bg" >
+		<div class="yt-popup-con">
+			<img src="../imgs/hongbaotip.png" style="width: 100%;">
+			<div class="yt-popup-main">
+				<div class="yt-popup-info" id="info">请稍后...</div>
+				<div class="yt-popup-confirm"><img class="goget" src="../imgs/sousuobtn.png" width="60%"></div>
+				<div class="yt-popup-note-center cancalGet">
+					取消
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="../js/webView.js"></script>
+	<script>
+		var guanjianzi = decodeURIComponent(window.location.search).split('"')[1];
+		
+		//console.log(guanjianzi);
+		document.getElementById('info').innerText=guanjianzi;
+		document.addEventListener('UniAppJSBridgeReady', function() {
+			document.querySelector('.cancalGet').addEventListener('click', function(e) {
+				if (e.isTrusted) {
+					plus.webview.currentWebview().close();
+				}
+			});
+			document.querySelector('.goget').addEventListener('click', function(evt) { 
+				uni.navigateTo({
+					url: "/pages/search/content?type=1&search=" + guanjianzi
+				});
+				plus.webview.currentWebview().close();
+			});
+		});
+	</script>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="content-type" content="text/html" >
+	<meta http-equiv="Pragma" content="no-cache">
+	<meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,width=device-width"/>
+	<meta name="app-mobile-web-app-capable"  content="yes" />
+	<meta name="app-mobile-web-app-status-bar-style" content="black-translucent" /> 
+	<title>618活动</title>
+	<style type="text/css">
+		
+		html,body,p{
+			margin: 0;
+			padding: 0;
+			width: 100%;
+			height: 100%;
+		}
+		.yt-popup-bg{
+			position: fixed;
+			width: 100%;
+			height: 100%;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background-color: rgba(0,0,0,.5);
+			z-index: 10;
+		}
+		.yt-popup-con{
+			width: 70%;
+			height: 45vh;
+			position: absolute;
+			top: 0;
+			left: 0;
+			bottom: 0;
+			right: 0;
+			margin: auto;
+		}
+		.yt-popup-con img{
+			vertical-align: middle;
+		}
+		/* .yt-popup-title{
+			position: absolute;
+			top: 7.5rem;
+			left: 30px;
+			font-size: 60px;
+			color: #fff;
+		} 
+		.yt-popup-main{
+			background-image: linear-gradient(180deg,#ff5249,#FF315B);
+			padding:1rem;
+			border-bottom-right-radius: 1.5rem;
+			border-bottom-left-radius: 1.5rem;
+			font-size: 1rem;
+			margin-top: -2px;
+		}
+		.yt-popup-info{
+			width: 88%;
+			height: auto;
+			max-height: 100px;
+			overflow: auto;
+			padding:1rem;
+			text-align: center;
+			margin:0 auto;
+			background-color: rgba(255,255,255,.4);
+			border-radius: .5rem;
+			color: #666;
+			font-size: .9rem;
+		}*/
+		.yt-main-img{
+			position: relative;
+		}
+		.kuaiqiang{
+			position: absolute;
+			bottom: 11%;
+			left: 20%;
+			animation: scaleDraw 3s ease-in-out infinite;
+			-webkit-animation: scaleDraw 3s ease-in-out infinite;
+		}
+		@keyframes scaleDraw {  /*定义关键帧、scaleDrew是需要绑定到选择器的关键帧名称*/
+            0%{
+                transform: scale(1);  /*开始为原始大小*/
+            }
+            25%{
+                transform: scale(1.2); /*放大1.1倍*/
+            }
+            50%{
+                transform: scale(1);
+            }
+            75%{
+                transform: scale(1.2);
+            }
+        }
+		.yt-activity-close{
+			position: absolute;
+			width: 100%;
+			text-align: center;
+			margin-top: 20px;
+		}
+	</style>
+</head>
+<body>
+	<div class="yt-popup-bg" >
+		<div class="yt-popup-con">
+			<div class="yt-main-img">
+				<img class="maininfo" src="../imgs/activity618.png" style="width: 100%;">
+				<img class="kuaiqiang" src="../imgs/kuaiqiang.png" width="54%">
+			</div>
+			<p class="yt-activity-close"><img width="20" class="cancalGet" src="../imgs/activity_close.png"></p>
+		</div>
+	</div>
+	<script type="text/javascript" src="../js/webView.js"></script>
+	<script>
+		var uid = window.location.hash.split('#')[1];
+		console.log(uid);
+		document.addEventListener('UniAppJSBridgeReady', function() {
+			document.querySelector('.cancalGet').addEventListener('click', function(e) {
+				plus.webview.currentWebview().close();
+			});
+			document.querySelector('.yt-main-img').addEventListener('click', function(e) {
+				
+				if(uid){
+					uni.navigateTo({
+						url: '/pages/index/webview?url=http://www.sqwolf.com/index.php/user/activity/uid/'+uid
+					});
+					//window.location.href="http://www.sqwolf.com/index.php/user/activity/uid/"+uid
+				}else{
+					uni.navigateTo({
+						url: '/pages/user/login'
+					});
+				}
+				plus.webview.currentWebview().close();
+			});
+		});
+	</script>
+</body>
+</html>
