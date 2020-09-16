@@ -1,0 +1,229 @@
+{
+    "name" : "好口令",
+    "appid" : "__UNI__54B5C78",
+    "versionName" : "1.0.1",
+    "versionCode" : 10104,
+    "transformPx" : false,
+    "app-plus" : {
+        /* 5+App特有相关 */
+        "usingComponents" : true,
+        "nvueCompiler" : "uni-app",
+        "splashscreen" : {
+            "alwaysShowBeforeRender" : true,
+            "waiting" : false,
+            "autoclose" : true,
+            "delay" : 0
+        },
+        "nativePlugins" : {
+            "UZK-Alibcsdk" : {
+                "__plugin_info__" : {
+                    "name" : "新版阿里百川SDK安卓4.0.0.15苹果4.0.1.6 - [试用版，仅用于自定义调试基座]",
+                    "description" : "新增渠道授权（静默式），无需用户进行二次授权，即可获得用户的渠道ID。",
+                    "platforms" : "Android,iOS",
+                    "url" : "https://ext.dcloud.net.cn/plugin?id=873",
+                    "android_package_name" : "",
+                    "ios_bundle_id" : "",
+                    "isCloud" : true,
+                    "bought" : 0,
+                    "pid" : "873",
+                    "parameters" : {}
+                }
+            }
+        },
+        /* 5+App特有相关 */
+        "modules" : {
+            "Payment" : {}
+        },
+        "compatible" : {
+            "ignoreVersion" : true //true表示忽略版本检查提示框，HBuilderX1.9.0及以上版本支持  
+        },
+        /* 模块配置 */
+        "distribute" : {
+            /* 应用发布信息 */
+            "android" : {
+                /* android打包配置 */
+                "targetSdkVersion" : "26",
+                "permissions" : [
+                    "<uses-feature android:name=\"android.hardware.camera\"/>",
+                    "<uses-feature android:name=\"android.hardware.camera.autofocus\"/>",
+                    "<uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\"/>",
+                    "<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\"/>",
+                    "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>",
+                    "<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\"/>",
+                    "<uses-permission android:name=\"android.permission.CALL_PHONE\"/>",
+                    "<uses-permission android:name=\"android.permission.CAMERA\"/>",
+                    "<uses-permission android:name=\"android.permission.CHANGE_NETWORK_STATE\"/>",
+                    "<uses-permission android:name=\"android.permission.CHANGE_WIFI_STATE\"/>",
+                    "<uses-permission android:name=\"android.permission.FLASHLIGHT\"/>",
+                    "<uses-permission android:name=\"android.permission.GET_ACCOUNTS\"/>",
+                    "<uses-permission android:name=\"android.permission.GET_TASKS\"/>",
+                    "<uses-permission android:name=\"android.permission.GET_TOP_ACTIVITY_INFO\"/>",
+                    "<uses-permission android:name=\"android.permission.INTERNET\"/>",
+                    "<uses-permission android:name=\"android.permission.MODIFY_AUDIO_SETTINGS\"/>",
+                    "<uses-permission android:name=\"android.permission.MOUNT_UNMOUNT_FILESYSTEMS\"/>",
+                    "<uses-permission android:name=\"android.permission.READ_CONTACTS\"/>",
+                    "<uses-permission android:name=\"android.permission.READ_PHONE_STATE\"/>",
+                    "<uses-permission android:name=\"android.permission.RECEIVE_BOOT_COMPLETED\"/>",
+                    "<uses-permission android:name=\"android.permission.RECORD_AUDIO\"/>",
+                    "<uses-permission android:name=\"android.permission.SYSTEM_ALERT_WINDOW\"/>",
+                    "<uses-permission android:name=\"android.permission.VIBRATE\"/>",
+                    "<uses-permission android:name=\"android.permission.WAKE_LOCK\"/>",
+                    "<uses-permission android:name=\"android.permission.WRITE_CONTACTS\"/>",
+                    "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\"/>",
+                    "<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>"
+                ]
+            },
+            "ios" : {
+                "urltypes" : [
+                    {
+                        "urlschemes" : [ "tbopen28049037" ],
+                        "id" : "tbopen"
+                    }
+                ],
+                "urlschemewhitelist" : [ "taobao", "tianmao", "tbopen", "tmall" ]
+            },
+            "apple" : {
+                "urltypes" : [
+                    {
+                        "urlidentifier" : "com.jixiangshenghuo.app",
+                        "urlschemes" : [ "jxsh" ]
+                    }
+                ]
+            },
+            "google" : {
+                "schemes" : [ "jxsh" ]
+            },
+            /* ios打包配置 */
+            "sdkConfigs" : {
+                "speech" : {},
+                "oauth" : {
+                    "weixin" : {
+                        "appid" : "wx60cfc6a1cea63096",
+                        "appsecret" : "9d1b44f7ac283bb615bbbc7bc66accf7",
+                        "UniversalLinks" : "https://uni.jixiangshenghuo.com/"
+                    },
+                    "qq" : {
+                        "appid" : "101816228"
+                    }
+                },
+                "share" : {
+                    "weixin" : {
+                        "appid" : "wx60cfc6a1cea63096",
+                        "UniversalLinks" : "https://uni.jixiangshenghuo.com/"
+                    },
+                    "qq" : {
+                        "appid" : "101816228"
+                    }
+                },
+                "push" : {
+                    "unipush" : {}
+                },
+                "statics" : {},
+                "payment" : {
+                    "alipay" : {
+                        "__platform__" : [ "ios", "android" ]
+                    }
+                },
+                "ad" : {}
+            },
+            "icons" : {
+                "ios" : {
+                    "appstore" : "unpackage/res/icons/1024x1024.png",
+                    "ipad" : {
+                        "app" : "unpackage/res/icons/76x76.png",
+                        "app@2x" : "unpackage/res/icons/152x152.png",
+                        "notification" : "unpackage/res/icons/20x20.png",
+                        "notification@2x" : "unpackage/res/icons/40x40.png",
+                        "proapp@2x" : "unpackage/res/icons/167x167.png",
+                        "settings" : "unpackage/res/icons/29x29.png",
+                        "settings@2x" : "unpackage/res/icons/58x58.png",
+                        "spotlight" : "unpackage/res/icons/40x40.png",
+                        "spotlight@2x" : "unpackage/res/icons/80x80.png"
+                    },
+                    "iphone" : {
+                        "app@2x" : "unpackage/res/icons/120x120.png",
+                        "app@3x" : "unpackage/res/icons/180x180.png",
+                        "notification@2x" : "unpackage/res/icons/40x40.png",
+                        "notification@3x" : "unpackage/res/icons/60x60.png",
+                        "settings@2x" : "unpackage/res/icons/58x58.png",
+                        "settings@3x" : "unpackage/res/icons/87x87.png",
+                        "spotlight@2x" : "unpackage/res/icons/80x80.png",
+                        "spotlight@3x" : "unpackage/res/icons/120x120.png"
+                    }
+                },
+                "android" : {
+                    "hdpi" : "unpackage/res/icons/72x72.png",
+                    "ldpi" : "unpackage/res/icons/48x48.png",
+                    "mdpi" : "unpackage/res/icons/48x48.png",
+                    "xhdpi" : "unpackage/res/icons/96x96.png",
+                    "xxhdpi" : "unpackage/res/icons/144x144.png",
+                    "xxxhdpi" : "unpackage/res/icons/192x192.png"
+                }
+            },
+            "splashscreen" : {
+                "android" : {
+                    "hdpi" : "unpackage/res/480x762.9.png",
+                    "xhdpi" : "unpackage/res/720x1242.9.png",
+                    "xxhdpi" : "unpackage/res/1080x1882.9.png"
+                },
+                "ios" : {
+                    "iphone" : {
+                        "retina35" : "unpackage/res/640x960.png",
+                        "retina40" : "unpackage/res/640x1136.png",
+                        "retina40l" : "",
+                        "retina47" : "unpackage/res/750x1334.png",
+                        "retina47l" : "",
+                        "retina55" : "unpackage/res/1242x2088.png",
+                        "retina55l" : "",
+                        "iphonex" : "unpackage/res/1125x2436.png",
+                        "iphonexl" : "",
+                        "portrait-896h@2x" : "unpackage/res/828x1792.png",
+                        "landscape-896h@2x" : "",
+                        "portrait-896h@3x" : "unpackage/res/1242x2688.png",
+                        "landscape-896h@3x" : ""
+                    }
+                }
+            }
+        }
+    },
+    /* SDK配置 */
+    "quickapp" : {},
+    /* 快应用特有相关 */
+    "mp-weixin" : {
+        "appid" : "wx8e46176577937d68",
+        "setting" : {
+            "urlCheck" : true,
+            "minified" : false,
+            "postcss" : true,
+            "es6" : false
+        }
+    },
+    "h5" : {
+        "template" : "pages/index/index.vue",
+        "domain" : "",
+        "title" : "好口令生活",
+        "router" : {
+            "base" : ""
+        },
+        "devServer" : {
+            "host" : "localhost",
+            "port" : 80, //端口号
+            "disableHostCheck" : true,
+            "proxy" : {
+                "/api" : {
+                    "target" : "http://test-tkb-api.xiaobay.com", //目标接口域名
+                    "changeOrigin" : true, //是否跨域
+                    "secure" : false // 设置支持https协议的代理
+                },
+                "/h5" : {
+                    "target" : "https://h5api.m.taobao.com", //目标接口域名
+                    "changeOrigin" : true, //是否跨域
+                    "secure" : false
+                }
+            }
+        }
+    },
+    "description" : "集好货，享优惠，好口令海量好货随你挑，还有返利可以拿"
+}
+/* ios打包配置 */
+

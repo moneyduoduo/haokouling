@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	
+	<meta charset="utf-8" >
+	<meta http-equiv="content-type" content="text/html" >
+	<meta http-equiv="Pragma" content="no-cache">
+	<meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,width=device-width"/>
+	<meta name="app-mobile-web-app-capable"  content="yes" />
+	<meta name="app-mobile-web-app-status-bar-style" content="black-translucent" /> 
+	<title>版本升级</title>
+	<style type="text/css">
+		html{
+			/* font-size: 96dp; */
+		}
+		html,body,p{
+			margin: 0;
+			padding: 0;
+			width: 100%;
+			height: 100%;
+		}
+		.yt-popup-bg{
+			position: fixed;
+			width: 100%;
+			height: 100%;
+			top: 0;
+			left: 0;
+			background-color: rgba(0,0,0,.4);
+			z-index: 10;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+		.yt-popup-con{
+			width: 80%;
+			position: relative;
+		}
+		.yt-popup-con img{
+			vertical-align: middle;
+			display: block;
+		}
+		.yt-popup-title{
+			position: absolute;
+			top: 2.5rem;
+			left: 1rem;
+			font-size: 1.5rem;
+			color: #fff;
+		}
+		.yt-title-note{
+			font-size: .8rem;
+		}
+		.yt-popup-main{
+			background-color: #fff;
+			padding:0 2rem 1rem;
+			border-bottom-right-radius: 1rem;
+			border-bottom-left-radius: 1rem;
+			font-size: 1rem;
+			box-shadow: 1px 1px 1em #FD4C66;
+		}
+		.yt-popup-info{
+			max-height: 10em;
+			overflow: auto;
+			padding:1rem 0;
+			color: #666;
+			font-size: .8rem;
+		}
+		.yt-popup-confirm{
+			height: 2.6rem;
+			line-height: 2.6rem;
+			text-align: center;
+			border-radius: 2.6rem;
+			color: #fff;
+			background-image: linear-gradient(to right,#FD667C,#FD4C66);
+			box-shadow: 1px 1px 1em #FD667C,-10px -10px 20px #fff;
+			margin: 1rem auto 1rem;
+		}
+		.yt-popup-note-center{
+			text-align: center;
+			color: #999;
+			font-size: .8rem;
+		}
+		.yj-jindubox{
+			position: absolute;
+			top: 0;
+			left: 0;
+			bottom: 0;
+			right: 0;
+			margin: auto;
+			width: 75%;
+			padding:20px;
+			height: 1.8em;
+			border-radius: 10px;
+			background-color: #fff;
+		}
+		.jindubar{
+			width: 100%;
+			height: 5px;
+			background-color: #ccc;
+			border-radius: 5px;
+			overflow: hidden;
+		}
+		.jindunote{
+			font-size: 13px; 
+			text-align: center;
+			margin-top: 10px;
+		}
+		#jindureadybar{
+			width: 2%;
+			height: 5px;
+			background-color: #FE4D47;
+			border-radius: 5px;
+			float: left;
+		}
+	</style>
+</head>
+<body>
+	<div class="yt-popup-bg" >
+		<div class="yt-popup-con" id="gengxin">
+			<img src="../imgs/huodong_header.png" style="width: 100%;">
+			<div class="yt-popup-title">
+				<p>新版本来啦！</p>
+				<p class="yt-title-note" id="version">v1.0.0</p>
+			</div>
+			<div class="yt-popup-main">
+				<div class="yt-popup-info" id="versionInfo">快来体验新版本啦！</div>
+				<div class="yt-popup-confirm downapp">立即更新</div>
+				<!-- <div class="yt-popup-note-center cancalGet">
+					下次再说
+				</div> -->
+			</div>
+		</div>
+		<div class="yj-jindubox" id="gengxin2" style="display: none">
+			<div class="jindubar">
+				<div id='jindureadybar'></div>
+			</div>
+			<p class="jindunote" id="jindunum"></p>
+		</div>
+	</div>
+	<script src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+	<script type="text/javascript" src="../js/webView.js"></script>
+	<!-- <script type="text/javascript" src="../js/jquery-3.1.1.js"></script> -->
+	<script>
+		var resstr = decodeURIComponent(window.location.search).split('?data=')[1];
+		var res = JSON.parse(resstr);
+		
+		
+		if(res.content!=''){
+			document.getElementById('versionInfo').innerText = res.content;
+		}else{
+			document.getElementById('versionInfo').innerText = '好口令APP更新了，赶快更新体验吧！';
+		}
+		function downloadUrl(url){
+			$('#gengxin').hide();
+			$('#gengxin2').show();
+			var dtask = plus.downloader.createDownload(url,{filename:"_doc/update/"}, function(d, status) {
+							// 下载完成 执行安装 并 关闭弹窗
+							if (status == 200) {
+								plus.runtime.install(d.filename, {
+									force: true
+								}, function(){
+									//正确安装后的回调
+									console.log('安装成功')
+									// let token = plus.storage.getItem('token');
+									// plus.storage.clear();
+									// plus.storage.setItem('token', token);
+									plus.nativeUI.showWaiting("正在重启应用...");
+									setTimeout(function(){
+										//关闭waiting
+										plus.nativeUI.closeWaiting();  
+										plus.runtime.restart();
+										//plus.webview.currentWebview().close();
+									},2000)
+									
+								}, function(error) {
+									console.log(JSON.stringify(error))
+									console.log('安装失败');
+								})
+								
+								
+							} else {
+								console.log('下载失败');
+							}
+						});
+						dtask.start();
+						dtask.addEventListener("statechanged", function(download, status){
+							//console.log(download.state);
+							if(download.state==3){
+								var readysize = download.downloadedSize;
+								var countsize = download.totalSize;
+								var jindu = parseInt(readysize/countsize*100);
+								//console.log(jindu);
+								$('#jindureadybar').width(jindu+'%');
+								$('#jindunum').text('正在下载中 '+jindu+'%');
+							}else{
+								$('.jindunote').text('准备中...');
+							}
+						}, false);
+		}
+		document.getElementById('version').innerText = 'v'+res.version;
+		document.addEventListener('UniAppJSBridgeReady', function() {
+			/* document.querySelector('.cancalGet').addEventListener('click', function(e) {
+				if (e.isTrusted) {
+					plus.webview.currentWebview().close();
+				}
+			}); */
+			document.querySelector('.downapp').addEventListener('click', function(evt) {
+				if(res.downloadUrl){
+					console.log('正在下载更新')
+					if (plus.device.vendor == 'Apple') {
+						plus.runtime.openURL(res.downloadUrl);
+						plus.webview.currentWebview().close();
+					} else {
+						downloadUrl(res.downloadUrl)
+					}
+				}else{
+					console.log('正在更新')
+					downloadUrl(res.wgtUrl)
+				}
+				
+			});
+	
+		});
+		
+	</script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="content-type" content="text/html" >
+	<meta http-equiv="Pragma" content="no-cache">
+	<meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,width=device-width"/>
+	<meta name="app-mobile-web-app-capable"  content="yes" />
+	<meta name="app-mobile-web-app-status-bar-style" content="black-translucent" /> 
+	<title>协议</title>
+	<style type="text/css">
+		
+		html,body,p{
+			margin: 0;
+			padding: 0;
+			width: 100%;
+			height: 100%;
+		}
+		.yt-popup-bg{
+			position: fixed;
+			width: 100%;
+			height: 100%;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background-color: rgba(0,0,0,.5);
+
+			z-index: 10;
+		}
+		.yt-search-con{
+			width: 18rem;
+			height: auto;
+			position: absolute;
+			top: 50%;
+			transform: translateY(-60%);
+			left: 0;
+			right: 0;
+			margin: auto;
+			background-color: #fff;
+			border-radius: 12px;
+			
+			
+		}
+		.xieyi_title {
+			background-color: #fff;
+			color:#333;
+			font-size: 18px;
+			height: 30px;
+			padding-top: 20px;
+			border-top-right-radius: 12px;
+			border-top-left-radius: 12px;
+			text-align: center;
+		}
+		.xieyi_content {
+			box-sizing: border-box;
+			padding: 0 20px;
+			font-size: 14px;
+			color: #333;
+		}
+		.btn_box {
+			display: flex;
+			border-top: 1px solid #e6e6e6;
+			margin-top: 10px;
+		}
+		.no_agree {
+			flex: 1;
+			text-align: center;
+			font-size: 18px;
+			color: #333;
+			line-height: 40px;
+		}
+		.agree {
+			flex: 1;
+			text-align: center;
+			font-size: 18px;
+			color: #009aff;
+			line-height: 40px;
+		}
+	</style>
+</head>
+<body>
+	<div class="yt-popup-bg" >
+		<div class="yt-search-con " id="box">
+			<div id="" class="xieyi_title">
+				服务协议和隐私政策
+			</div>	
+			<div class="xieyi_content">
+				请你务必审慎阅读、充分理解“服务协议”和隐私政策各条款，包括不限于：为了向你提供购物导购、内容分析等服务，我们想要收集你的设备信息、操作日志等个人信息。你可以在“设置”中查看、变更、删除个人信息并管理你的授权。
+			</div>
+			<div class="xieyi_content">
+				你可阅读<span class="fuwu" style="color: #009aff;">《服务协议》</span>和 <span class="yinsi" style="color: #009aff;">《隐私政策》</span>了解详细信息。如你同意，请点击“同意”开始接受我们的服务
+			</div>
+			<div id="" class="btn_box">
+				<div id="" class="no_agree">
+					暂不同意
+				</div>
+				<div id="" class="agree">
+					同意
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="../js/webView.js"></script>
+	<script type="text/javascript">
+		document.addEventListener('UniAppJSBridgeReady', function() {
+			document.querySelector('.no_agree').addEventListener('click', function(e) {
+				plus.runtime.quit();  
+			});
+			document.querySelector('.agree').addEventListener('click', function(evt) { 
+				plus.webview.currentWebview().close();
+				plus.storage.setItem('isAgree', '1');
+			});
+			document.querySelector('.fuwu').addEventListener('click', function(evt) {
+				uni.navigateTo({
+					url: "/pages/pass/protocol?type=1"
+				});
+				// plus.webview.currentWebview().close();
+			});
+			document.querySelector('.yinsi').addEventListener('click', function(evt) {
+				uni.navigateTo({
+					url: "/pages/pass/protocol?type=2"
+				});
+				// plus.webview.currentWebview().close();
+			});
+		});
+	</script>
+</body>
+</html>

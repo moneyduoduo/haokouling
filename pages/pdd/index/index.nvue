@@ -1,0 +1,402 @@
+<template>
+    <view class="tabs">
+		<view :style="{ height: statusBarHeight }" class="uni-status-bar"></view> <!-- 状态栏占位符 -->
+		<view class="hederBar">
+			<view class="titleBar">
+				<view class="searchBox">
+					<image src="/static/image/common/search-icon3.png" class="searchBoxicon"></image>
+					<input type="text" class="searchInput" v-model="searchText"  @confirm="searchNow" placeholder="输入关键字搜索拼多多商品" confirm-hold="false">
+				</view>
+				<!-- <view>{{title}}</view> -->
+			</view>
+			<view class="iconLaftBar" @click="goPage(-1)">
+				<image src="/static/image/common/back-icon.jpg"  class="backIcon"/>
+			</view>
+			<view class="iconRightBar" @click="searchNow()"><text class="searchNow">搜索</text></view>
+		</view>
+		<view class="hotBar">
+			<scroll-view ref="tabbar1" id="tab-bar" class="tab-bar" :scroll-x="true" :show-scrollbar="false" scroll-with-animation="true"  :scroll-left="scrollInto">
+				<view style="flex-direction: column;">
+					<view style="flex-direction: row;">
+						<view class="uni-tab-item" v-for="(tab,index) in subList" :key="index"  @click="tabClick(index)" :ref="'tabitem'+index">
+							<text class="uni-tab-item-title" :class="tabIndex==index ? 'uni-tab-item-title-active' : ''">{{tab.label}}</text>
+							<image v-if="tabIndex==index" class="tabimg" src="../../../static/image/index/bolang_red.png"></image>
+							<image v-else class="tabimg" src="../../static/img/bolang_empty.png"></image>
+						</view>
+					</view>
+				</view>
+			</scroll-view>
+		</view>
+		
+		<swiper class="tab-box" ref="swiper1" :current="tabIndex" :duration="300" @change="onswiperchange">
+			<swiper-item class="swiper-item" v-for="(page, index) in subList" :key="index">
+				<data-list class="page-item" :cid="page.cid" ref="page"></data-list>
+			</swiper-item>
+		</swiper>
+
+    </view>
+</template>
+<script>
+	import $common from "@/common/common.js";
+	import $http from "@/common/request.js";
+	import $msg from "@/common/msg.js";
+	
+	var statusBarHeight = uni.getSystemInfoSync().statusBarHeight + 'px'
+	import dataList from './list.nvue';
+	// #ifdef APP-PLUS
+	const dom = weex.requireModule('dom');
+	// #endif
+    export default {
+		components: {
+			dataList
+		},
+        data() {
+            return {
+				statusBarHeight:statusBarHeight,
+				title:'',
+				searchText:'',
+				tabList:[
+					{saleType:1,label:'近两小时',active:true},
+					{saleType:2,label:'全天榜单',active:false},
+
+				],
+				//0全部，1女装，2男装，3内衣，4美妆，5配饰，6鞋品，7箱包，8儿童，9母婴，10居家，11美食，12数码，13家电，14其他，15车品，16文体，17宠物
+				subList:[
+					{cid:0,label:'全部',active:true,type:0},
+					{cid:8439,label:'女装',active:false,type:1},
+					{cid:239,label:'男装',active:false,type:2},
+					{cid:8583,label:'内衣',active:false,type:3},
+					{cid:18482,label:'美妆',active:false,type:4},
+					{cid:17412,label:'配饰',active:false,type:5},
+					{cid:8508,label:'男鞋',active:false,type:6},
+					{cid:8509,label:'女鞋',active:false,type:7},
+					{cid:8538,label:'箱包',active:false,type:8},
+					{cid:14933,label:'儿童',active:false,type:9},
+					{cid:14697,label:'母婴',active:false,type:10},
+					{cid:16989,label:'居家',active:false,type:11},
+					{cid:6398,label:'美食',active:false,type:12},
+					{cid:2933,label:'数码',active:false,type:13},
+					{cid:6076,label:'家电',active:false,type:14},
+					{cid:5921,label:'智能',active:false,type:15},
+					{cid:7639,label:'车品',active:false,type:16},
+					{cid:2629,label:'文体',active:false,type:17},
+					{cid:16288,label:'宠物',active:false,type:18},
+					
+				],
+				scrollInto:0,
+				indicatorLineLeft:0,
+				indicatorLineWidth:0,
+				isTap: false,
+				tabIndex:0,
+				menuTabIndex:0,
+				bili:0,
+				allianceScale:0
+		   }
+        },
+       onReady() {
+		   // #ifdef APP-PLUS-NVUE
+		   dom.getComponentRect(this.$refs['tabitem0'][0], res => {
+		   	this.indicatorLineWidth = res.size.width;
+		   });
+		   //#endif
+		   
+		   // #ifndef APP-PLUS-NVUE
+		   uni.createSelectorQuery().in(this).select('.uni-tab-item').fields({
+		   	dataset: true,
+		   	size: true,
+		   }, (res) => {
+		   	this.indicatorLineWidth = res.width;
+		   }).exec();
+		   //#endif
+		setTimeout(()=> {
+			 this.pageList = this.$refs.page;
+			 this.switchTab(this.tabIndex);
+		 }, 500);
+		
+       },
+	   onShow:function(){
+		   
+	   },
+		onLoad:function() {
+			//this.getCates()
+        },
+
+        methods: {
+			goPage:function(url,type){
+				$common.goPage(url,type)
+			},
+			searchNow(){
+				if(this.searchText==''){
+					return $msg.toast('请输入商品名称')
+				}
+			
+				uni.navigateTo({
+					url: '/pages/pdd/search/index?keyword='+this.searchText
+				});
+				
+			},
+			saleType(index){
+				this.subList.forEach((v,i)=>{
+					this.pageList[i].dataList = []
+					this.pageList[i].saleTypeFn(index)
+				})
+				this.tabList.forEach((item,tabindex)=>{
+					if(item.saleType == index){
+						item.active = true
+					}else{
+						item.active = false
+					}
+				})
+				this.switchTab(this.tabIndex);
+			},
+			scroll(e){
+				console.log(e.detail.scrollLeft)
+			},
+			tabClick(clickIndex){
+				if (this.pageList[clickIndex].dataList.length === 0) {
+					this.loadTabData(clickIndex);
+				}
+				
+				this.subList.forEach((item,index)=>{
+					if(clickIndex == index){
+						item.active = true;
+					}else{
+						item.active = false
+					}
+				})
+				this.tabIndex = clickIndex;
+				//this.isTap = true
+				//this.indicatorLineLeft = clickIndex * this.indicatorLineWidth
+				this.scrollAnimation(clickIndex)
+			},
+			onswiperchange(e) {
+				let index = e.target.current || e.detail.current;
+				this.switchTab(index);
+			},
+			scrollAnimation(index){
+				let scrollData = (this.subList[index].type-3)*this.indicatorLineWidth;
+				if(scrollData<0){
+					scrollData = 0
+				}
+				if(scrollData>(this.subList.length*this.indicatorLineWidth)){
+					scrollData = this.subList.length*this.indicatorLineWidth
+				}
+				this.scrollInto = scrollData
+				
+			},
+			async getCates(){
+				 let res = await $http.post('/api/pddGoods/getCates')
+				 console.log(JSON.stringify(res))
+			},
+			switchTab(index) {
+				
+				if (this.pageList[index].dataList.length === 0) {
+					this.loadTabData(index);
+				}
+ 				if (this.tabIndex === index) {
+					return;
+				}
+				
+				this.subList.forEach((item,itemIndex)=>{
+					if(itemIndex == index){
+						item.active = true
+					}else{
+						item.active = false
+					}
+				})
+				this.tabIndex = index;
+				//this.isTap = true
+				//this.indicatorLineLeft = index * this.indicatorLineWidth
+				this.scrollAnimation(index)
+			},
+			loadTabData(index) {
+				this.pageList[index].loadData();
+			},
+            
+        },
+	
+    }
+</script>
+
+<style>
+	 /* #ifndef APP-PLUS */
+    page {
+        width: 100%;
+        min-height: 100%;
+        display: flex;
+    }
+	
+	 /* #endif */
+	.uni-status-bar{background-color: #ffffff;}
+	
+	
+	.tabimg {
+		width: 26px;
+		height: 4px;
+	}
+	.tabs {
+	    flex: 1;
+	    flex-direction: column;
+	    overflow: hidden;
+	    background-color: #f2f2f2;
+	}
+	.hederBar{
+		background-color: #ffffff;
+		height:100rpx;
+		position: relative;
+	}
+	.iconLaftBar{
+		height:100rpx;
+		width: 100rpx;
+		justify-content: center;
+		align-items: center;
+		position:absolute;
+		left:0;
+		top:0;
+	}
+	.iconRightBar{
+		height:100rpx;
+		width: 100rpx;
+		justify-content: center;
+		align-items: center;
+		position:absolute;
+		right:0;
+		top:0;
+	}
+	.backIcon{
+		width:20rpx ;
+		height:36rpx;
+	}
+	.searchBox{
+		width: 550rpx;
+		height:60rpx;
+		background-color: #f8f8f8;
+		border-radius: 30rpx;
+		flex-direction: row;
+		align-items: center;
+	}
+	.searchBoxicon{
+		width: 35rpx; height:35rpx; margin:0 20rpx;
+	}
+	.searchInput{
+		font-size: 28rpx;
+		flex: 1;
+	}
+	.searchNow{font-size: 28rpx;}
+	.titleBar{
+		justify-content: center;
+		align-items: center;
+		flex: 1;
+	}
+	.hotBar{
+		width: 750rpx;
+		background-color: #ffffff;
+	}
+	
+	.menuBar{
+		width: 750upx;
+		height: 80upx;
+	}
+	
+	
+	
+	
+	
+	
+	.tab-bar {
+		width: 750upx;
+		height: 60upx;
+		flex-direction: row;
+		/* #ifndef APP-PLUS */
+		white-space: nowrap;
+		/* #endif */
+	}
+	
+	/* #ifndef APP-NVUE */
+	.tab-bar ::-webkit-scrollbar {
+	    display: none;  
+	    width: 0 !important;  
+	    height: 0 !important;  
+	    -webkit-appearance: none;  
+	    background: transparent;  
+	}
+	/* #endif */
+	
+	
+	
+	.scroll-view-indicator {
+		position: relative;
+		height: 2px;
+		background-color: transparent;
+	}
+	
+	.scroll-view-underline {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		width: 0;
+		background-color: #cb072b;
+	}
+	
+	.scroll-view-animation {
+		transition-duration: 0.2s;
+		transition-property: left;
+	}
+	
+	.tab-bar-line {
+		height: 1upx;
+		background-color: #cccccc;
+	}
+	
+	.tab-box {
+		flex: 1;
+	}
+	
+	.uni-tab-item {
+		/* #ifndef APP-PLUS */
+		display: inline-block;
+		/* #endif */
+		flex-wrap: nowrap;
+		width: 110rpx;
+		align-items: center;
+		justify-content: center;
+	}
+	
+	.uni-tab-item-title {
+		color: #555;
+		font-size: 30upx;
+/* 		height: 80upx;
+		line-height: 80upx; */
+		font-size: 28rpx;
+		
+		flex-wrap: nowrap;
+		/* #ifndef APP-PLUS */
+		white-space: nowrap;
+		/* #endif */
+	}
+	
+	.uni-tab-item-title-active {
+		color: #000;
+		font-size: 32rpx;
+		font-weight: bold;
+		
+	}
+	.swiper-item {
+		flex: 1;
+		flex-direction: column;
+	}
+	
+	.page-item {
+		flex: 1;
+		flex-direction: row;
+		position: absolute;
+		left: 0;
+		top: 0;
+		right: 0;
+		bottom: 0;
+	}
+	.tab-bar-line {
+		height: 1upx;
+		background-color: #cccccc;
+	}
+</style>

@@ -1,0 +1,125 @@
+<template>
+	<view class="history">
+		<view :style="{ height: statusBarHeight }" class="uni-status-bar"></view> <!-- 状态栏占位符 -->
+		<view class="header" style="background-color: #fff;color:#333">
+			<view class="header-return" @click="back()">
+				<image class="return-icon" src="../../static/img/fanhui_black.png" mode="widthFix"></image>
+			</view>
+			<view class="header-title">我的收藏</view>
+			<view class="header-right" @click="opercoll">
+				<text class="right-text">{{opertxt}}</text>
+			</view>
+		</view>
+		<view class="content">
+			<view class="time-period">
+				<text class="time-head">今天</text>
+				<view class="goods-list">
+					<view class="goods-item">
+						<image class="goods-image" src="../../hybrid/html/imgs/jin.png" mode="widthFix"></image>
+						<view class="goods-info">
+							<text class="goods-name">商品名称商品名称商品名称商品名称商品名称商品名称商品名称商品名称商品名称商品名称商品名称</text>
+							<view class="goods-price">
+								<text class="old-price">87.3</text>
+								<text class="coupon-money">333</text>
+							</view>
+						</view>
+					</view>
+				</view>
+			</view>
+		</view>
+	</view>
+	
+</template>
+
+<script>
+	let statusBarHeight = uni.getSystemInfoSync().statusBarHeight + 'px'
+	export default {
+		data (){
+			return {
+				statusBarHeight:statusBarHeight,
+				opertxt:'编辑'
+			}
+		},
+		methods: {
+			back: function ()  {
+				uni.navigateBack();
+			}
+		},
+		onLoad:function() {
+			this.$http.post('/api/goodsHistory/getList').then( res => {
+				console.log(res)
+			})
+		}
+	}
+</script>
+
+<style scoped>
+	/* #ifndef APP-PLUS */
+	page {
+	    width: 100%;
+	    min-height: 100%;
+	    display: flex;
+	}
+	
+	 /* #endif */
+	 .uni-status-bar {
+		 background-color: #fff;
+	 }
+	 .history {
+	     flex: 1;
+	     flex-direction: column;
+	     overflow: hidden;
+	     background-color: #f2f2f2;
+	 }
+	.header{
+		position: relative;
+		right: 0;
+		left: 0;
+		top: 0;
+		z-index: 998;
+		/* padding-top: 38upx; */
+		justify-content: space-between;
+		flex-direction: row;
+		align-items: center;
+		text-align: center;
+		height: 100upx;
+	}
+	.header-return {
+		width: 100upx;
+		height: 100upx;
+		text-align: center;
+		justify-content: center;
+	}
+	.return-icon{
+		width: 40upx;
+		height: 40upx;
+		line-height: 40upx;
+	}
+	.header-title {
+		flex: 1;
+		align-items: center;
+	}
+	.header-right {
+		font-size: 30upx;
+		width: 90upx;
+	}
+	.right-text {
+		font-size: 30upx;
+	}
+	.content {
+		height: 100vh;
+		padding-top: 128upx;
+	}
+	.time-period {
+		width: 100%;
+		background-color: #fff;
+		
+	}
+	.time-head {
+		color: #999;
+		
+	}
+	.goods-image {
+		width: 280upx;
+	}
+</style>

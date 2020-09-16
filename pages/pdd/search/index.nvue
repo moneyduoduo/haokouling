@@ -1,0 +1,251 @@
+<template>
+    <view class="tabs">
+		<view :style="{ height: statusBarHeight }" class="uni-status-bar"></view> <!-- 状态栏占位符 -->
+		<view class="hederBar">
+			<view class="titleBar">
+				<view>{{title}}</view>
+			</view>
+			<view class="iconLaftBar" @click="goPage(-1)">
+				<image src="/static/image/common/back-icon.jpg"  class="backIcon"/>
+			</view>
+		</view>
+		<view class="tab-box">
+			<data-list class="page-item" :keyword="keyword" :themeId="themeId" ref="page"></data-list>
+		</view>
+
+
+    </view>
+</template>
+<script>
+	import $common from "@/common/common.js";
+	import $http from "@/common/request.js";
+	var statusBarHeight = uni.getSystemInfoSync().statusBarHeight + 'px'
+	import dataList from './list.nvue';
+
+    export default {
+		components: {
+			dataList
+		},
+        data() {
+            return {
+				statusBarHeight:statusBarHeight,
+				title:'',
+				themeId:'',
+				keyword:''
+		   }
+        },
+       onReady() {
+		setTimeout(()=> {
+			 this.pageList = this.$refs.page;
+			 this.loadTabData()
+		 }, 500);
+		
+       },
+	   onShow:function(){
+		   
+	   },
+		onLoad:function(e) {
+			console.log(e.keyword)
+			//this.getCates()
+			if(e.keyword){
+				this.keyword = e.keyword
+				this.title = e.keyword
+			}
+			if(e.themeId){
+				this.themeId = e.themeId
+				this.title = e.title
+			}
+        },
+
+        methods: {
+			goPage:function(url,type){
+				$common.goPage(url,type)
+			},
+
+			scroll(e){
+				console.log(e.detail.scrollLeft)
+			},
+
+			loadTabData() {
+				this.pageList.loadData();
+			},
+            
+        },
+	
+    }
+</script>
+
+<style>
+	 /* #ifndef APP-PLUS */
+    page {
+        width: 100%;
+        min-height: 100%;
+        display: flex;
+    }
+	
+	 /* #endif */
+	.uni-status-bar{background-color: #ffffff;}
+	.tabs {
+	    flex: 1;
+	    flex-direction: column;
+	    overflow: hidden;
+	    background-color: #f2f2f2;
+	}
+	.hederBar{
+		background-color: #ffffff;
+		height:100rpx;
+		position: relative;
+	}
+	.iconLaftBar{
+		height:100rpx;
+		width: 100rpx;
+		justify-content: center;
+		align-items: center;
+		position:absolute;
+		left:0;
+		top:0;
+	}
+	.iconRightBar{
+		height:100rpx;
+		width: 100rpx;
+		justify-content: center;
+		align-items: center;
+		position:absolute;
+		right:0;
+		top:0;
+	}
+	.backIcon{
+		width:20rpx ;
+		height:36rpx;
+	}
+	.searchBox{
+		width: 550rpx;
+		height:60rpx;
+		background-color: #f8f8f8;
+		border-radius: 30rpx;
+		flex-direction: row;
+		align-items: center;
+	}
+	.searchBoxicon{
+		width: 35rpx; height:35rpx; margin:0 20rpx;
+	}
+	.searchInput{
+		font-size: 28rpx;
+		flex: 1;
+	}
+	.searchNow{font-size: 28rpx;}
+	.titleBar{
+		justify-content: center;
+		align-items: center;
+		flex: 1;
+	}
+	.hotBar{
+		width: 750rpx;
+		background-color: #ffffff;
+	}
+	
+	.menuBar{
+		width: 750upx;
+		height: 80upx;
+	}
+	
+	
+	
+	
+	
+	
+	.tab-bar {
+		width: 750upx;
+		height: 84upx;
+		flex-direction: row;
+		/* #ifndef APP-PLUS */
+		white-space: nowrap;
+		/* #endif */
+	}
+	
+	/* #ifndef APP-NVUE */
+	.tab-bar ::-webkit-scrollbar {
+	    display: none;  
+	    width: 0 !important;  
+	    height: 0 !important;  
+	    -webkit-appearance: none;  
+	    background: transparent;  
+	}
+	/* #endif */
+	
+	
+	
+	.scroll-view-indicator {
+		position: relative;
+		height: 2px;
+		background-color: transparent;
+	}
+	
+	.scroll-view-underline {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		width: 0;
+		background-color: #cb072b;
+	}
+	
+	.scroll-view-animation {
+		transition-duration: 0.2s;
+		transition-property: left;
+	}
+	
+	.tab-bar-line {
+		height: 1upx;
+		background-color: #cccccc;
+	}
+	
+	.tab-box {
+		flex: 1;
+	}
+	
+	.uni-tab-item {
+		/* #ifndef APP-PLUS */
+		display: inline-block;
+		/* #endif */
+		flex-wrap: nowrap;
+		padding-left: 20rpx;
+		padding-right: 20rpx;
+	}
+	
+	.uni-tab-item-title {
+		color: #555;
+		font-size: 30upx;
+		height: 80upx;
+		line-height: 80upx;
+		flex-wrap: nowrap;
+		/* #ifndef APP-PLUS */
+		white-space: nowrap;
+		/* #endif */
+	}
+	
+	.uni-tab-item-title-active {
+		color: #cb072b;
+		border-bottom-style:solid;
+		border-bottom-width:3px;
+		border-bottom-color:#cb072b;
+	}
+	
+	.swiper-item {
+		flex: 1;
+		flex-direction: column;
+	}
+	
+	.page-item {
+		flex: 1;
+		flex-direction: row;
+		position: absolute;
+		left: 0;
+		top: 0;
+		right: 0;
+		bottom: 0;
+	}
+	.tab-bar-line {
+		height: 1upx;
+		background-color: #cccccc;
+	}
+</style>

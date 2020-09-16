@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="content-type" content="text/html" >
+	<meta http-equiv="Pragma" content="no-cache">
+	<meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,width=device-width"/>
+	<meta name="app-mobile-web-app-capable"  content="yes" />
+	<meta name="app-mobile-web-app-status-bar-style" content="black-translucent" /> 
+	<title>升级啦</title>
+	<style type="text/css">
+		
+		html,body{
+			margin: 0;
+			padding: 0;
+			width: 100%;
+			height: 100%;
+		}
+		p{
+			margin: 0;
+			padding: 0;
+		}
+		.yt-popup-bg{
+			position: fixed;
+			width: 100%;
+			height: 100%;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background-color: rgba(0,0,0,.2);
+			z-index: 10;
+		}
+		.yt-popup-con{
+			width: 80%;
+			position: absolute;
+			top: 15%;
+			left: 0;
+			bottom: 0;
+			right: 0;
+			margin: auto;
+			text-align: center;
+		}
+		.yt-popup-con img{
+			vertical-align: middle;
+		}
+		/* .yt-popup-title{
+			position: absolute;
+			top: 7.5rem;
+			left: 30px;
+			font-size: 60px;
+			color: #fff;
+		} */
+		.yt-popup-main{
+			background-color:#fff;
+			padding:1rem;
+			border-radius: 10px;
+			font-size: 1rem;
+			margin-top: -30%;
+		}
+		.yt-popup-info{
+			width: 80%;
+			height: auto;
+			margin:80px auto 30px;
+			max-height: 100px;
+			overflow: auto;
+			padding:1rem;
+			background-color: #FFF4D5;
+			border-radius: 5px;
+			color: #666;
+			font-size: .9rem;
+			border:1px solid #FFCC3F;
+		}
+		.yt-popup-confirm{
+			margin-top: 1rem;
+		}
+		.yt-popup-note-center{
+			color: #666;
+			margin-top: .8rem;
+			font-size: .9rem;
+		}
+		.yt-search-info{
+			/* height: 3em; */
+			font-size: .9rem;
+			margin:1.25rem 0;
+		}
+		.yt-search-cancle{
+			width: 45%;
+			height: 39px;
+			line-height: 39px;
+			border: 1px solid #FF4545;
+			border-radius: 3px;
+			color: #FF4545;
+			float: left;
+		}
+		.yt-search-confirm{
+			width: 45%;
+			height: 40px;
+			line-height: 40px;
+			background-color: #FF4545;
+			color: #fff;
+			border-radius: 3px;
+			float: right;
+		}
+		.yj-clearfix:after {
+		  content: "";
+		  display: block;
+		  height: 0;
+		  clear: both;
+		  visibility: hidden;
+		}
+		.yt-popup-title{
+			font-weight: bold;
+			font-size: 18px;
+			color: #333;
+			margin-bottom: 10px;
+		}
+		.yj-popup-list{
+			position: relative;
+			text-align: left;
+			line-height: 2;
+			font-size: 14px;
+		}
+		.yj-popup-list:before{
+			content: '●';
+			color: #FFC000;
+			margin-right: 10px;
+		}
+	</style>
+</head>
+<body>
+	<div class="yt-popup-bg">
+		<div class="yt-popup-con">
+			<img src="../imgs/jin.png" width="60%">
+			<div class="yt-popup-main">
+				<div class="yt-popup-info">
+					<p class="yt-popup-title">恭喜您</h2>
+					<p class="yj-popup-list">获得淘宝购物返利权限</p>
+					<p class="yj-popup-list"> 荣升为金牌会员</p>
+				</div>
+				<div class="yj-clearfix" style="padding: 0 10px;">
+					<div class="cancalGet yt-search-cancle">
+						<span id="timer">5</span>s后关闭
+					</div>
+					<div class="goget yt-search-confirm">去购物</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="../js/webView.js"></script>
+	<script>
+		document.addEventListener('UniAppJSBridgeReady', function() {
+			
+			var timer=5;
+			setInterval(function(){
+				timer--;
+				document.getElementById('timer').innerText=timer;
+			},1000);
+			setTimeout(function() {
+				uni.switchTab({
+					url: '/pages/index/index'
+				});
+				plus.webview.currentWebview().close();
+			}, 5000);
+			document.querySelector('.cancalGet').addEventListener('click', function(e) {
+				if (e.isTrusted) {
+					plus.webview.currentWebview().close();
+				}
+			});
+			document.querySelector('.goget').addEventListener('click', function(evt) { 
+				uni.switchTab({
+					url: '/pages/index/index'
+				});
+				plus.webview.currentWebview().close();
+			});
+		});
+	</script>
+</body>
+</html>

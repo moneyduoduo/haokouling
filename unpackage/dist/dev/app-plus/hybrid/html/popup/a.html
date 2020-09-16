@@ -1,0 +1,63 @@
+<html>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<head>
+		<title></title>
+		<script type="text/javascript">
+			function Reader(content, cID, stopID, continueID) {
+				this.conLoad = document.getElementById(cID);
+				this.stopBtn = document.getElementById(stopID);
+				this.continueBtn = document.getElementById(continueID);
+				this.content = content;
+				this.index = 0;
+				var t = this;
+				this.stopBtn.onclick = (
+					function() {
+						return function() {
+							t.stopReader(t);
+						};
+					})(t);
+				this.continueBtn.onclick = (
+					function() {
+						return function() {
+							t.continueReader(t);
+						};
+					})(t);
+			}
+			Reader.prototype = {
+				startReader: function() {
+					var t = this;
+					t.toId = setInterval(function() {
+						if (t.content[t.index]) {
+							t.conLoad.innerHTML += t.content[t.index];
+						}
+						t.index++;
+						if (t.content.length == t.index) {
+							clearInterval(t.toId);
+							t.conLoad.innerHTML += "【未完待续】";
+						}
+					}, 200);
+				},
+				stopReader: function(t) {
+					t.flag = true;
+					clearInterval(t.toId);
+				},
+				continueReader: function(t) {
+					if (t.flag)
+						t.startReader();
+					t.flag = false;
+				}
+			};
+			var content =
+				"蒙古亲王僧格林沁慓悍勇猛，他率领的军队向来号称能征惯战，八旗兵、绿营他都看不上眼，更何况那些临时招募的练勇。可偏偏就是这些他眼中的乌合之众，这些年来在江南战果累累，最终攻下了江宁，夺得了对太平军作战的全胜。" +
+				"相反地，他的蒙古铁骑在与捻军的角逐中常常打败仗，相形之下，昔日的声威锐减。这个一代天骄的后裔，对曾氏兄弟和湘军窝着一肚皮无名怒火。" +
+				"湘军进江宁后，打劫财富，屠城纵火，又放走幼天王，朝野谤讟四起，物议沸腾，僧格林沁听了十分得意，赶紧打发富明阿以视察满城为由，去江宁实地了解。谁料曾国荃一吓一贿征服了富明阿，江宁将军回去后向僧格林沁作了假汇报。";
+			//页面加载完成之后执行。
+			window.onload = function() {
+				new Reader(content, "content", "btnStop", "btnContinue").startReader();
+			};
+		</script>
+	<body>
+		<div id='content'></div>
+		<div id='operate'><input type='button' id='btnStop' value='stop' /><input type='button' id='btnContinue' value='continue' /></div>
+	</body>
+</html>

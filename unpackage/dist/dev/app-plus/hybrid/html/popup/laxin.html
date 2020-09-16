@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="content-type" content="text/html" >
+	<meta http-equiv="Pragma" content="no-cache">
+	<meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,width=device-width"/>
+	<meta name="app-mobile-web-app-capable"  content="yes" />
+	<meta name="app-mobile-web-app-status-bar-style" content="black-translucent" /> 
+	<title>拉新</title>
+	<style type="text/css">
+		
+		html,body,p{
+			margin: 0;
+			padding: 0;
+			width: 100%;
+			height: 100%;
+		}
+		.yt-popup-bg{
+			position: fixed;
+			width: 100%;
+			height: 100%;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background-color: rgba(0,0,0,.4);
+			z-index: 10;
+		}
+		.yt-laxin-con{
+			width: 17rem;
+			height: 18rem;
+			top: 0;
+			left: 0;
+			bottom: 0;
+			right: 0;
+			margin: auto;
+			position: absolute;
+		}
+		.yt-laxin-img{
+			width: 100%;
+			position: absolute;
+		}
+		.yj-laxin-btngroup{
+			width: 100%;
+			position: absolute;
+			bottom: 10px;
+			padding: 0 20px;
+			box-sizing: border-box;
+		}
+		.yt-search-cancle{
+			padding: 0 35px;
+			height: 39px;
+			line-height: 39px;
+			border: 1px solid #FF4545;
+			border-radius: 3px;
+			color: #FF4545;
+			float: left;
+		}
+		.yt-search-confirm{
+			padding: 0 30px;
+			height: 40px;
+			line-height: 40px;
+			background-color: #FF4545;
+			color: #fff;
+			border-radius: 3px;
+			float: right;
+		}
+		.yj-clearfix:after {
+		  content: "";
+		  display: block;
+		  height: 0;
+		  clear: both;
+		  visibility: hidden;
+		}
+	</style>
+</head>
+<body>
+	<div class="yt-popup-bg" >
+		<div class="yt-laxin-con">
+			<img class="yt-laxin-img" src="../imgs/laxin.png">
+			<div class="yj-clearfix yj-laxin-btngroup">
+				<div class="cancalGet yt-search-cancle">
+					取消
+				</div>
+				<div class="goget yt-search-confirm">查看</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="../js/webView.js"></script>
+	<script type="text/javascript">
+		
+		document.addEventListener('UniAppJSBridgeReady', function() {
+			document.querySelector('.cancalGet').addEventListener('click', function(e) {
+				if (e.isTrusted) {
+					
+					plus.webview.currentWebview().close();
+				}
+			});
+			document.querySelector('.goget').addEventListener('click', function(evt) {
+				uni.navigateTo({
+					url: "/pages/activity/laxin"
+				});
+				plus.webview.currentWebview().close();
+			});
+		});
+	</script>
+</body>
+</html>
